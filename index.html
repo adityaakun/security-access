@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="google-adsense-account" content="ca-pub-9122473834319786">
+  <title>XTerClose - WEB BUG WA</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://i.ibb.co.com/7t8rJSWY/wmremove-transformed.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://i.ibb.co.com/7t8rJSWY/wmremove-transformed.jpg">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://i.ibb.co.com/7t8rJSWY/wmremove-transformed.jpg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <style>
+    :root {
+      --primary: #7e22ce;
+      --secondary: #9333ea;
+      --accent: #a855f7;
+      --dark: #0f011a;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: linear-gradient(-45deg, #1a0028, #000000, #2d004d, #000000);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+    
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(168,85,247,0.3) 0%, rgba(168,85,247,0.1) 70%);
+      animation: float linear infinite;
+      z-index: 1;
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(100vh) scale(0); }
+      100% { transform: translateY(-100px) scale(1); }
+    }
+    
+    .glow {
+      text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent), 0 0 30px var(--accent);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border: 1px solid var(--accent);
+      padding: 1rem 1.5rem;
+      border-radius: 0.75rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 0 20px var(--accent);
+      position: relative;
+      overflow: hidden;
+      z-index: 2;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 30px var(--accent);
+    }
+    
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: 0.5s;
+    }
+    
+    .btn-primary:hover::before {
+      left: 100%;
+    }
+    
+    .card {
+      background: rgba(15, 1, 26, 0.8);
+      backdrop-filter: blur(10px);
+      border: 2px solid var(--accent);
+      border-radius: 1rem;
+      box-shadow: 0 0 30px rgba(168, 85, 247, 0.2);
+      position: relative;
+      overflow: hidden;
+      z-index: 2;
+    }
+    
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    
+    .floating {
+      animation: floating 3s ease-in-out infinite;
+    }
+    
+    @keyframes floating {
+      0% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+      100% {
+        transform: translateY(0px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Background Bubbles -->
+  <div id="bubbles-container"></div>
+
+  <!-- Main content -->
+  <div class="min-h-screen flex flex-col items-center justify-center px-4 py-8 relative z-10">
+    <div class="card p-8 w-full max-w-md animate__animated animate__fadeIn">
+      <!-- Logo & Title -->
+      <div class="text-center mb-6">
+        <div class="text-6xl mb-4 text-purple-400 floating">
+          <i class="fas fa-rocket"></i>
+        </div>
+        <h1 class="text-4xl font-bold mb-2 glow text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
+          XTerClose
+        </h1>
+        <p class="text-purple-300 text-lg">V1 - Upgrade Required</p>
+      </div>
+      
+      <!-- Alert Message -->
+      <div class="text-center mb-6">
+        <div class="text-yellow-400 text-4xl mb-4 pulse">
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-yellow-300 mb-3">Perhatian Penting!</h2>
+        <div class="bg-yellow-900 bg-opacity-30 p-4 rounded-lg border border-yellow-600 mb-4">
+          <p class="text-yellow-200 text-sm">
+            <i class="fas fa-info-circle text-yellow-400 mr-2"></i>
+            XTerClose yang anda gunakan sudah tidak didukung dan telah digantikan oleh versi terbaru.
+          </p>
+        </div>
+      </div>
+
+      <!-- Info Box -->
+      <div class="text-center mb-6">
+        <div class="bg-gradient-to-r from-purple-900 to-pink-900 p-4 rounded-lg border border-purple-600 mb-4">
+          <p class="text-purple-200 mb-2 font-semibold">
+            <i class="fas fa-gift text-pink-400 mr-2"></i>
+            Aplikasi versi Baru Telah Tersedia!
+          </p>
+          <p class="text-green-400 font-bold text-xl">
+            XTerClose V2
+          </p>
+          <p class="text-gray-300 text-sm mt-2">
+            Dengan fitur-fitur premium dan keamanan yang ditingkatkan
+          </p>
+        </div>
+      </div>
+
+      <!-- Features -->
+      <div class="mb-6">
+        <h3 class="text-lg font-bold text-purple-300 mb-3 text-center">Fitur Baru di V2:</h3>
+        <div class="grid grid-cols-1 gap-2 text-sm">
+          <div class="flex items-center bg-purple-900 bg-opacity-50 p-3 rounded">
+            <i class="fas fa-bug text-red-400 mr-3 text-lg"></i>
+            <div>
+              <span class="font-bold">Function Bug Ganas</span>
+              <p class="text-gray-400 text-xs">Fitur bug yang lebih powerful</p>
+            </div>
+          </div>
+          <div class="flex items-center bg-purple-900 bg-opacity-50 p-3 rounded">
+            <i class="fas fa-hammer text-orange-400 mr-3 text-lg"></i>
+            <div>
+              <span class="font-bold">Menggunakan Metode Ban Terbaru</span>
+              <p class="text-gray-400 text-xs">Teknologi ban terupdate</p>
+            </div>
+          </div>
+          <div class="flex items-center bg-purple-900 bg-opacity-50 p-3 rounded">
+            <i class="fas fa-bolt text-yellow-400 mr-3 text-lg"></i>
+            <div>
+              <span class="font-bold">Bot Secepat Kilat</span>
+              <p class="text-gray-400 text-xs">Kecepatan maksimal</p>
+            </div>
+          </div>
+          <div class="flex items-center bg-purple-900 bg-opacity-50 p-3 rounded">
+            <i class="fas fa-robot text-blue-400 mr-3 text-lg"></i>
+            <div>
+              <span class="font-bold">Fitur Jadi Bot</span>
+              <p class="text-gray-400 text-xs">Transformasi menjadi bot</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Download Button -->
+      <div class="btn-primary mb-4 pulse" onclick="downloadV2()">
+        <i class="fas fa-download mr-2"></i>
+        Download XTerClose V2 Sekarang
+      </div>
+      
+      <!-- Countdown -->
+      <div id="countdown" class="text-center text-sm text-purple-300 mb-4">
+        Redirect apk dalam <span id="countdown-number" class="font-bold">10</span> detik...
+      </div>
+      
+      <!-- Footer -->
+      <div class="text-center text-xs text-gray-500 mt-4">
+        <p>Terima kasih atas pengertian Anda.</p>
+        <p class="mt-2 font-semibold">Tim Developer XTerClose</p>
+      </div>
+    </div>
+    
+    <footer class="text-xs text-gray-500 mt-6 text-center z-10">
+      <p>by MiXterNal • © <span id="current-year"></span> XTerClose</p>
+    </footer>
+  </div>
+
+  <script>
+    function createBubbles() {
+      const container = document.getElementById('bubbles-container');
+      const bubbleCount = 15;
+      
+      for (let i = 0; i < bubbleCount; i++) {
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+        
+        const size = Math.random() * 60 + 20;
+        const left = Math.random() * 100;
+        const duration = Math.random() * 20 + 10;
+        const delay = Math.random() * 5;
+        
+        bubble.style.width = `${size}px`;
+        bubble.style.height = `${size}px`;
+        bubble.style.left = `${left}vw`;
+        bubble.style.animationDuration = `${duration}s`;
+        bubble.style.animationDelay = `${delay}s`;
+        
+        container.appendChild(bubble);
+      }
+    }
+    
+    // Set current year
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+    
+    function downloadV2() {
+  const url = 'https://sfile.mobi/3BbGIpVZ1CO';
+
+  // Helper untuk open new tab safe
+  const openNormal = () => {
+    const link = document.createElement('a');
+    link.href = url;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const ua = navigator.userAgent || navigator.vendor || window.opera;
+  const isAndroid = /Android/i.test(ua);
+  const isIOS = /iPhone|iPad|iPod/i.test(ua);
+
+  if (isAndroid) {
+    // intent: coba buka di Chrome app di Android
+    const fallback = encodeURIComponent(url);
+    const intentUrl = `intent://${url.replace(/^https?:\/\//,'')}#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=${fallback};end;`;
+    // langsung ganti lokasi ke intent URL (browser akan handle)
+    window.location.href = intentUrl;
+
+    // fallback: jika dalam beberapa detik tidak berhasil (browser tidak dukung intent), buka biasa
+    setTimeout(() => {
+      // jika masih di page ini, fallback ke normal open
+      openNormal();
+    }, 1200);
+
+    return;
+  }
+
+  if (isIOS) {
+    // iOS: beberapa sistem mengenali googlechrome:// scheme — best-effort
+    // NOTE: modern iOS biasanya menolak, jadi fallback cepat ke normal open
+    try {
+      const chromeScheme = url.replace(/^https?:\/\//, 'googlechrome://');
+      // coba buka Chrome scheme (may or may not work)
+      window.location.href = chromeScheme;
+      // jika tidak pindah maka fallback
+      setTimeout(openNormal, 800);
+    } catch (e) {
+      openNormal();
+    }
+    return;
+  }
+
+  // Desktop / unknown: tidak bisa paksa — buka di tab baru
+  openNormal();
+}
+
+    let countdown = 10;
+    const countdownElement = document.getElementById('countdown-number');
+    const countdownInterval = setInterval(() => {
+      countdown--;
+      countdownElement.textContent = countdown;
+      
+      if (countdown <= 0) {
+        clearInterval(countdownInterval);
+        downloadV2();
+      }
+    }, 1000);
+    
+    // Inisialisasi
+    window.addEventListener('load', () => {
+      createBubbles();
+    });
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GTSNZBE2B6"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-GTSNZBE2B6');
+</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9122473834319786"
+     crossorigin="anonymous"></script>
+
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9122473834319786"
+     data-ad-slot="7080386036"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9122473834319786"
+     crossorigin="anonymous"></script>
+</body>
+</html>
