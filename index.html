@@ -1,312 +1,732 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ultimate AI Coding Assistant - Blackbox Killer Edition</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
-<style>
-/* BODY & THEME */
-body { background: linear-gradient(135deg,#0f0c29,#302b63,#24243e); color:#fff; font-family:'Roboto',sans-serif; min-height:100vh; transition:all 0.5s; }
-body.dark { background: linear-gradient(135deg,#1a1a2e,#16213e,#0f3460); color:#e0e0e0; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate AI Coding Assistant - Blackbox Killer Edition</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        /* BODY & THEME */
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            font-family: 'Roboto', sans-serif;
+            min-height: 100vh;
+            transition: all 0.5s;
+            overflow-x: hidden;
+        }
+        body.dark {
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            color: #e0e0e0;
+        }
 
-/* CONTAINER */
-.container { background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); border-radius:25px; padding:50px; box-shadow:0 20px 40px rgba(0,0,0,0.6); animation:slideIn 2s ease-out; margin-bottom:100px; }
-body.dark .container { background: rgba(0,0,0,0.4); }
+        /* CONTAINER */
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 50px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            animation: slideIn 2s ease-out;
+            margin-bottom: 100px;
+        }
+        body.dark .container {
+            background: rgba(0, 0, 0, 0.4);
+        }
 
-/* CARDS */
-.card { background: rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:20px; transition:all 0.3s; position:relative; margin-bottom:30px; }
-.card:hover { transform: translateY(-5px); box-shadow:0 15px 30px rgba(0,0,0,0.3); }
-body.dark .card { background: rgba(0,0,0,0.3); border-color: rgba(255,255,255,0.1); }
+        /* CARDS */
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            transition: all 0.3s;
+            position: relative;
+            margin-bottom: 30px;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        body.dark .card {
+            background: rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
 
-/* BUTTON PREMIUM */
-.btn-premium { background: linear-gradient(45deg,#ff6b6b,#ffa500,#ff1493); border:none; color:white; font-weight:bold; transition: all 0.4s; position:relative; overflow:hidden; }
-.btn-premium::before { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background: linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent); transition:left 0.5s; }
-.btn-premium:hover::before { left:100%; }
-.btn-premium:hover { transform: translateY(-5px) scale(1.05); box-shadow:0 10px 25px rgba(255,107,107,0.6); }
+        /* BUTTON PREMIUM */
+        .btn-premium {
+            background: linear-gradient(45deg, #ff6b6b, #ffa500, #ff1493);
+            border: none;
+            color: white;
+            font-weight: bold;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-premium::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        .btn-premium:hover::before {
+            left: 100%;
+        }
+        .btn-premium:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.6);
+        }
 
-/* TEXTAREAS & CODE */
-textarea, pre { background: rgba(255,255,255,0.2); border:2px solid rgba(255,255,255,0.3); color:white; border-radius:15px; font-family:'Courier New', monospace; transition: all 0.3s; }
-textarea:focus, pre:focus { border-color:#ff6b6b; box-shadow:0 0 10px rgba(255,107,107,0.5); }
-body.dark textarea, body.dark pre { background: rgba(0,0,0,0.5); color:#e0e0e0; }
+        /* TEXTAREAS & CODE */
+        textarea, pre {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            border-radius: 15px;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s;
+        }
+        textarea:focus, pre:focus {
+            border-color: #ff6b6b;
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+        }
+        body.dark textarea, body.dark pre {
+            background: rgba(0, 0, 0, 0.5);
+            color: #e0e0e0;
+        }
 
-/* PARTICLES */
-.particle { position:absolute; width:6px; height:6px; background: linear-gradient(45deg,#ff6b6b,#ffa500); border-radius:50%; animation: float 8s infinite ease-in-out, glow 2s infinite alternate; }
-@keyframes float {0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-30px) rotate(180deg);}}
-@keyframes glow {from{box-shadow:0 0 5px #ff6b6b;} to{box-shadow:0 0 20px #ffa500;}}
+        /* PARTICLES */
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: linear-gradient(45deg, #ff6b6b, #ffa500);
+            border-radius: 50%;
+            animation: float 8s infinite ease-in-out, glow 2s infinite alternate;
+            pointer-events: none;
+        }
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-30px) rotate(180deg);
+            }
+        }
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 5px #ff6b6b;
+            }
+            to {
+                box-shadow: 0 0 20px #ffa500;
+            }
+        }
 
-/* NAVBAR */
-.navbar { background: rgba(0,0,0,0.9); backdrop-filter: blur(15px); border-bottom:1px solid rgba(255,255,255,0.1); }
-body.dark .navbar { background: rgba(255,255,255,0.1); }
+        /* NAVBAR */
+        .navbar {
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        body.dark .navbar {
+            background: rgba(255, 255, 255, 0.1);
+        }
 
-/* THEME TOGGLE */
-.theme-toggle { position:fixed; top:20px; right:20px; z-index:1000; border-radius:50%; width:50px; height:50px; transition:all 0.3s; }
+        /* THEME TOGGLE */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            transition: all 0.3s;
+        }
 
-/* COPY/DOWNLOAD BTN */
-.copy-btn,.download-btn { position:absolute; top:10px; right:10px; background:rgba(0,0,0,0.7); border:none; color:white; border-radius:8px; padding:5px 10px; cursor:pointer; transition:all 0.3s; }
-.copy-btn:hover,.download-btn:hover { background:rgba(255,107,107,0.8);}
-.download-btn { right:70px; }
+        /* COPY/DOWNLOAD BTN */
+        .copy-btn, .download-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            border: none;
+            color: white;
+            border-radius: 8px;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .copy-btn:hover, .download-btn:hover {
+            background: rgba(255, 107, 107, 0.8);
+        }
+        .download-btn {
+            right: 70px;
+        }
 
-/* LOADING & PROGRESS */
-.loading { display:none; text-align:center; margin-top:10px; color:#ff6b6b;}
-.progress-bar { background: linear-gradient(45deg,#ff6b6b,#ffa500); transition: width 0.5s; }
+        /* LOADING & PROGRESS */
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 10px;
+            color: #ff6b6b;
+        }
+        .progress-bar {
+            background: linear-gradient(45deg, #ff6b6b, #ffa500);
+            transition: width 0.5s;
+        }
 
-/* CHAT MINI AI */
-.chat-container { position:fixed; bottom:20px; right:20px; width:350px; height:450px; background:rgba(255,255,255,0.1); backdrop-filter:blur(15px); border-radius:20px; display:none; flex-direction:column; box-shadow:0 10px 30px rgba(0,0,0,0.5); animation: chatSlide 0.5s ease-out; }
-@keyframes chatSlide { from{transform:translateY(100px);opacity:0;} to{transform:translateY(0);opacity:1;} }
-.chat-messages { flex:1; padding:15px; overflow-y:auto; scrollbar-width:thin; scrollbar-color:#ff6b6b rgba(255,255,255,0.2);}
-.chat-input { padding:15px; background:rgba(255,255,255,0.2); border:none; border-radius:0 0 20px 20px; color:white; font-size:16px; }
+        /* CHAT MINI AI */
+        .chat-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            height: 450px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            display: none;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            animation: chatSlide 0.5s ease-out;
+        }
+        @keyframes chatSlide {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #ff6b6b rgba(255, 255, 255, 0.2);
+        }
+        .chat-input {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 0 0 20px 20px;
+            color: white;
+            font-size: 16px;
+        }
 
-/* AUTOCOMPLETE */
-.autocomplete { position:absolute; background: rgba(0,0,0,0.8); border-radius:10px; max-height:200px; overflow-y:auto; z-index:1000; display:none;}
-.autocomplete-item { padding:10px; cursor:pointer; border-bottom:1px solid rgba(255,255,255,0.1);}
-.autocomplete-item:hover{background:rgba(255,107,107,0.5);}
-</style>
+        /* AUTOCOMPLETE */
+        .autocomplete {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+        .autocomplete-item {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .autocomplete-item:hover {
+            background: rgba(255, 107, 107, 0.5);
+        }
+
+        /* TOAST NOTIFICATIONS */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            .chat-container {
+                width: 90%;
+                height: 300px;
+            }
+        }
+    </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg animate__animated animate__fadeInDown">
-<div class="container-fluid">
-<a class="navbar-brand" href="#"><i class="fas fa-code"></i> AI Coding Blackbox Killer</a>
-<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-<span class="navbar-toggler-icon"></span>
-</button>
-<div class="collapse navbar-collapse" id="navbarNav">
-<ul class="navbar-nav ms-auto">
-<li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
-<li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
-<li class="nav-item"><a class="nav-link" href="#" onclick="toggleHistory()">History</a></li>
-<li class="nav-item"><a class="nav-link" href="#" onclick="showTutorial()">Tutorial</a></li>
-<li class="nav-item"><a class="nav-link" href="#" onclick="toggleChat()">Chat AI</a></li>
-</ul>
-</div>
-</div>
-</nav>
+    <nav class="navbar navbar-expand-lg animate__animated animate__fadeInDown">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#" onclick="confettiEffect()"><i class="fas fa-code"></i> AI Coding Blackbox Killer</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="togglePanel('history')">History</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="togglePanel('tutorial')">Tutorial</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="toggleChat()">Chat AI</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-<div class="container mt-5 animate__animated animate__fadeInUp">
-<h1 class="text-center mb-4"><i class="fas fa-robot"></i> Ultimate AI Coding Assistant</h1>
-<p class="text-center mb-5">Generate, Fix, Review, Optimize, Refactor kode + mini AI chat + autocomplete + syntax highlight + history!</p>
+    <div class="container mt-5 animate__animated animate__fadeInUp">
+        <h1 class="text-center mb-4"><i class="fas fa-robot"></i> Ultimate AI Coding Assistant</h1>
+        <p class="text-center mb-5">Generate, Fix, Review, Optimize, Refactor kode + mini AI chat + autocomplete + syntax highlight + history + lebih banyak lagi!</p>
 
-<!-- ROW -->
-<div class="row">
-<div class="col-lg-6">
-<div class="card p-4 animate__animated animate__slideInLeft">
-<h3><i class="fas fa-magic"></i> Generate Kode</h3>
-<select id="lang" class="form-select mb-3">
-<option value="python">Python</option>
-<option value="javascript">JavaScript</option>
-<option value="java">Java</option>
-<option value="cpp">C++</option>
-<option value="csharp">C#</option>
-<option value="php">PHP</option>
-<option value="ruby">Ruby</option>
-<option value="go">Go</option>
-<option value="swift">Swift</option>
-<option value="kotlin">Kotlin</option>
-<option value="rust">Rust</option>
-<option value="typescript">TypeScript</option>
-<option value="scala">Scala</option>
-<option value="perl">Perl</option>
-<option value="lua">Lua</option>
-</select>
-<div style="position:relative;">
-<textarea id="prompt" class="form-control mb-3" rows="5" placeholder="Tulis prompt kamu..." oninput="showAutocomplete(this)"></textarea>
-<div id="autocomplete" class="autocomplete"></div>
-</div>
-<button class="btn btn-premium w-100" onclick="generateCode()">Generate <i class="fas fa-wand-magic-sparkles"></i></button>
-<div class="loading" id="gen-loading"><i class="fas fa-spinner fa-spin"></i> Generating...</div>
-<pre id="generated-code" class="mt-3 p-3 rounded language-python"><code></code></pre>
-<button class="copy-btn" onclick="copyToClipboard('generated-code')"><i class="fas fa-copy"></i></button>
-<button class="download-btn" onclick="downloadCode('generated-code')"><i class="fas fa-download"></i></button>
-</div>
-</div>
+        <!-- SEARCH BAR -->
+        <div class="mb-4">
+            <input type="text" id="global-search" class="form-control" placeholder="Search fitur atau kode..." oninput="filterFeatures()">
+        </div>
 
-<div class="col-lg-6">
-<div class="card p-4 animate__animated animate__slideInRight">
-<h3><i class="fas fa-wrench"></i> Fix Kode</h3>
-<textarea id="code-input" class="form-control mb-3" rows="5" placeholder="Kode bermasalah"></textarea>
-<textarea id="error-input" class="form-control mb-3" rows="2" placeholder="Deskripsi error"></textarea>
-<button class="btn btn-premium w-100" onclick="fixCode()">Fix <i class="fas fa-tools"></i></button>
-<div class="loading" id="fix-loading"><i class="fas fa-spinner fa-spin"></i> Fixing...</div>
-<pre id="fixed-code" class="mt-3 p-3 rounded"><code></code></pre>
-<button class="copy-btn" onclick="copyToClipboard('fixed-code')"><i class="
-fas fa-copy"></i></button>
-<button class="download-btn" onclick="downloadCode('fixed-code')"><i class="fas fa-download"></i></button>
-</div>
-</div>
-</div> <!-- end row -->
+        <!-- ROW FOR CARDS -->
+        <div class="row" id="features-container">
+            <div class="col-lg-6 col-md-12 feature-item" data-feature="generate">
+                <div class="card p-4 animate__animated animate__slideInLeft">
+                    <h3><i class="fas fa-magic"></i> Generate Kode</h3>
+                    <select id="lang" class="form-select mb-3">
+                        <option value="python">Python</option>
+                        <option value="javascript">JavaScript</option>
+                        <option value="java">Java</option>
+                        <option value="cpp">C++</option>
+                        <option value="csharp">C#</option>
+                        <option value="php">PHP</option>
+                        <option value="ruby">Ruby</option>
+                        <option value="go">Go</option>
+                        <option value="swift">Swift</option>
+                        <option value="kotlin">Kotlin</option>
+                        <option value="rust">Rust</option>
+                        <option value="typescript">TypeScript</option>
+                        <option value="scala">Scala</option>
+                        <option value="perl">Perl</option>
+                        <option value="lua">Lua</option>
+                    </select>
+                    <div style="position:relative;">
+                        <textarea id="prompt" class="form-control mb-3" rows="5" placeholder="Tulis prompt kamu..." oninput="showAutocomplete(this)" onkeydown="if(event.ctrlKey && event.key==='Enter') generateCode()"></textarea>
+                        <div id="autocomplete" class="autocomplete"></div>
+                    </div>
+                    <button class="btn btn-premium w-100" onclick="generateCode()">Generate <i class="fas fa-wand-magic-sparkles"></i></button>
+                    <div class="loading mt-3" id="gen-loading">
+                        <div class="progress">
+                            <div class="progress-bar" id="gen-progress" style="width: 0%"></div>
+                        </div>
+                        <p>Generating...</p>
+                    </div>
+                    <pre id="generated-code" class="mt-3 p-3 rounded language-python"><code></code></pre>
+                    <button class="copy-btn" onclick="copyToClipboard('generated-code')"><i class="fas fa-copy"></i></button>
+                    <button class="download-btn" onclick="downloadCode('generated-code', 'generated')"><i class="fas fa-download"></i></button>
+                </div>
+            </div>
 
-<!-- HISTORY PANEL -->
-<div id="history-panel" class="card p-4 mt-5 animate__animated animate__fadeIn" style="display:none;">
-<h3><i class="fas fa-history"></i> History Kode</h3>
-<input type="text" id="history-search" class="form-control mb-3" placeholder="Search history..." oninput="filterHistory()">
-<ul id="history-list" class="list-group"></ul>
-</div>
+            <div>
+                            <div class="col-lg-6 col-md-12 feature-item" data-feature="fix">
+                <div class="card p-4 animate__animated animate__slideInRight">
+                    <h3><i class="fas fa-wrench"></i> Fix Kode</h3>
+                    <textarea id="code-input" class="form-control mb-3" rows="5" placeholder="Kode bermasalah"></textarea>
+                    <textarea id="error-input" class="form-control mb-3" rows="2" placeholder="Deskripsi error"></textarea>
+                    <button class="btn btn-premium w-100" onclick="fixCode()">Fix <i class="fas fa-tools"></i></button>
+                    <div class="loading mt-3" id="fix-loading">
+                        <div class="progress">
+                            <div class="progress-bar" id="fix-progress" style="width: 0%"></div>
+                        </div>
+                        <p>Fixing...</p>
+                    </div>
+                    <pre id="fixed-code" class="mt-3 p-3 rounded"><code></code></pre>
+                    <button class="copy-btn" onclick="copyToClipboard('fixed-code')"><i class="fas fa-copy"></i></button>
+                    <button class="download-btn" onclick="downloadCode('fixed-code', 'fixed')"><i class="fas fa-download"></i></button>
+                </div>
+            </div>
+        </div> <!-- end row -->
 
-<!-- MINI AI CHAT -->
-<div id="chat-container" class="chat-container d-flex flex-column">
-<div class="chat-messages" id="chat-messages"></div>
-<input type="text" id="chat-input" class="chat-input" placeholder="Tanya AI..." onkeydown="if(event.key==='Enter'){sendChat()}">
-</div>
+        <!-- SECOND ROW FOR ADDITIONAL CARDS -->
+        <div class="row" id="features-container-2">
+            <div class="col-lg-4 col-md-6 feature-item" data-feature="review">
+                <div class="card p-4 animate__animated animate__zoomIn">
+                    <h3><i class="fas fa-search"></i> Review Kode</h3>
+                    <textarea id="review-input" class="form-control mb-3" rows="5" placeholder="Kode untuk direview"></textarea>
+                    <button class="btn btn-premium w-100" onclick="reviewCode()">Review <i class="fas fa-eye"></i></button>
+                    <div class="loading mt-3" id="review-loading">
+                        <div class="progress">
+                            <div class="progress-bar" id="review-progress" style="width: 0%"></div>
+                        </div>
+                        <p>Reviewing...</p>
+                    </div>
+                    <pre id="reviewed-code" class="mt-3 p-3 rounded"><code></code></pre>
+                    <button class="copy-btn" onclick="copyToClipboard('reviewed-code')"><i class="fas fa-copy"></i></button>
+                    <button class="download-btn" onclick="downloadCode('reviewed-code', 'reviewed')"><i class="fas fa-download"></i></button>
+                </div>
+            </div>
 
-<!-- TUTORIAL COLLAPSIBLE -->
-<div id="tutorial-panel" class="card p-4 mt-5 animate__animated animate__fadeIn" style="display:none;">
-<h3><i class="fas fa-book-open"></i> Tutorial Cepet</h3>
-<ul>
-<li>Gunakan prompt spesifik untuk hasil lebih akurat</li>
-<li>Pilih bahasa coding yang sesuai</li>
-<li>Gunakan fitur Fix & Optimize untuk kode lebih bersih</li>
-<li>History menyimpan semua kode kamu</li>
-<li>Mini AI chat siap bantu brainstorming coding</li>
-</ul>
-</div>
+            <div class="col-lg-4 col-md-6 feature-item" data-feature="optimize">
+                <div class="card p-4 animate__animated animate__zoomIn">
+                    <h3><i class="fas fa-rocket"></i> Optimize Kode</h3>
+                    <textarea id="optimize-input" class="form-control mb-3" rows="5" placeholder="Kode untuk dioptimalkan"></textarea>
+                    <button class="btn btn-premium w-100" onclick="optimizeCode()">Optimize <i class="fas fa-bolt"></i></button>
+                    <div class="loading mt-3" id="optimize-loading">
+                        <div class="progress">
+                            <div class="progress-bar" id="optimize-progress" style="width: 0%"></div>
+                        </div>
+                        <p>Optimizing...</p>
+                    </div>
+                    <pre id="optimized-code" class="mt-3 p-3 rounded"><code></code></pre>
+                    <button class="copy-btn" onclick="copyToClipboard('optimized-code')"><i class="fas fa-copy"></i></button>
+                    <button class="download-btn" onclick="downloadCode('optimized-code', 'optimized')"><i class="fas fa-download"></i></button>
+                </div>
+            </div>
 
-<!-- PARTICLES EFFECT -->
-<script>
-for(let i=0;i<30;i++){
-    let p=document.createElement('div');
-    p.className='particle';
-    p.style.left=Math.random()*window.innerWidth+'px';
-    p.style.top=Math.random()*window.innerHeight+'px';
-    document.body.appendChild(p);
-}
-</script>
+            <div class="col-lg-4 col-md-6 feature-item" data-feature="refactor">
+                <div class="card p-4 animate__animated animate__zoomIn">
+                    <h3><i class="fas fa-recycle"></i> Refactor Kode</h3>
+                    <textarea id="refactor-input" class="form-control mb-3" rows="5" placeholder="Kode untuk direfactor"></textarea>
+                    <button class="btn btn-premium w-100" onclick="refactorCode()">Refactor <i class="fas fa-sync-alt"></i></button>
+                    <div class="loading mt-3" id="refactor-loading">
+                        <div class="progress">
+                            <div class="progress-bar" id="refactor-progress" style="width: 0%"></div>
+                        </div>
+                        <p>Refactoring...</p>
+                    </div>
+                    <pre id="refactored-code" class="mt-3 p-3 rounded"><code></code></pre>
+                    <button class="copy-btn" onclick="copyToClipboard('refactored-code')"><i class="fas fa-copy"></i></button>
+                    <button class="download-btn" onclick="downloadCode('refactored-code', 'refactored')"><i class="fas fa-download"></i></button>
+                </div>
+            </div>
+        </div> <!-- end second row -->
 
-<!-- JS LIBRARIES -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
-<script>
-function toggleHistory(){ 
-    const panel=document.getElementById('history-panel');
-    panel.style.display=panel.style.display==='none'?'block':'none';
-}
-function toggleChat(){
-    const chat=document.getElementById('chat-container');
-    chat.style.display=chat.style.display==='none'?'flex':'none';
-}
-function showTutorial(){
-    const tutorial=document.getElementById('tutorial-panel');
-    tutorial.style.display=tutorial.style.display==='none'?'block':'none';
-}
+        <!-- HISTORY PANEL -->
+        <div id="history-panel" class="card p-4 mt-5 animate__animated animate__fadeIn" style="display:none;">
+            <h3><i class="fas fa-history"></i> History Kode</h3>
+            <input type="text" id="history-search" class="form-control mb-3" placeholder="Search history..." oninput="filterHistory()">
+            <ul id="history-list" class="list-group"></ul>
+            <button class="btn btn-secondary mt-3" onclick="exportHistory()">Export History as JSON</button>
+            <div class="mt-3" id="history-stats">Total Kode: 0</div>
+        </div>
 
-function copyToClipboard(id){
-    const text=document.getElementById(id).innerText;
-    navigator.clipboard.writeText(text);
-    alert('Copied to clipboard!');
-}
+        <!-- TUTORIAL PANEL -->
+        <div id="tutorial-panel" class="card p-4 mt-5 animate__animated animate__fadeIn" style="display:none;">
+            <h3><i class="fas fa-book-open"></i> Tutorial Cepat</h3>
+            <ul>
+                <li>Gunakan prompt spesifik untuk hasil lebih akurat (e.g., "Buat fungsi Python untuk sorting array").</li>
+                <li>Pilih bahasa coding yang sesuai dari dropdown.</li>
+                <li>Gunakan fitur Fix untuk debug error, Review untuk best practices, Optimize untuk performa, Refactor untuk struktur.</li>
+                <li>History menyimpan semua kode Anda – login dulu untuk akses penuh.</li>
+                <li>Mini AI chat siap bantu brainstorming coding (gunakan prompt sederhana).</li>
+                <li>Autocomplete membantu lengkapi prompt Anda.</li>
+                <li>Toggle dark/light theme untuk kenyamanan mata.</li>
+                <li>Keyboard shortcut: Ctrl+Enter untuk generate cepat.</li>
+            </ul>
+            <div class="mt-3">
+                <iframe width="100%" height="200" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Tutorial Video Placeholder" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
 
-function downloadCode(id){
-    const text=document.getElementById(id).innerText;
-    const blob=new Blob([text],{type:'text/plain'});
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement('a');
-    a.href=url;
-    a.download='code.txt';
-    a.click();
-    URL.revokeObjectURL(url);
-}
+        <!-- MINI AI CHAT -->
+        <div id="chat-container" class="chat-container d-flex flex-column">
+            <div class="chat-messages" id="chat-messages"></div>
+            <input type="text" id="chat-input" class="chat-input" placeholder="Tanya AI..." onkeydown="if(event.key==='Enter'){sendChat()}">
+        </div>
 
-// MINI AI CHAT FUNCTION
-async function sendChat(){
-    const input=document.getElementById('chat-input');
-    const msg=input.value.trim();
-    if(!msg) return;
-    const chatBox=document.getElementById('chat-messages');
-    chatBox.innerHTML+='<div><b>You:</b> '+msg+'</div>';
-    input.value='';
-    // send ke API /chat
-    try{
-        const res=await fetch('/generate_code',{
-            method:'POST',
-            headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({prompt:msg, lang:'python'})
-        });
-        const data=await res.json();
-        chatBox.innerHTML+='<div><b>AI:</b> '+(data.code||data.error)+'</div>';
-        chatBox.scrollTop=chatBox.scrollHeight;
-    }catch(e){
-        chatBox.innerHTML+='<div style="color:red;"><b>Error:</b> '+e+'</div>';
-    }
-}
+        <!-- TOAST CONTAINER -->
+        <div class="toast-container" id="toast-container"></div>
 
-// GENERATE CODE
-async function generateCode(){
-    const prompt=document.getElementById('prompt').value;
-    const lang=document.getElementById('lang').value;
-    const loading=document.getElementById('gen-loading');
-    const codeBox=document.getElementById('generated-code').querySelector('code');
-    if(!prompt) return alert('Prompt diperlukan!');
-    loading.style.display='block';
-    try{
-        const res=await fetch('/generate_code',{
-            method:'POST',
-            headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({prompt,lang})
-        });
-        const data=await res.json();
-        if(data.code) codeBox.textContent=data.code;
-        Prism.highlightAll();
-    }catch(e){alert(e);}
-    loading.style.display='none';
-}
+        <!-- PARTICLES EFFECT -->
+        <script>
+            for (let i = 0; i < 50; i++) {
+                let p = document.createElement('div');
+                p.className = 'particle';
+                p.style.left = Math.random() * window.innerWidth + 'px';
+                p.style.top = Math.random() * window.innerHeight + 'px';
+                p.style.animationDelay = Math.random() * 8 + 's';
+                document.body.appendChild(p);
+            }
+        </script>
 
-// FIX CODE
-async function fixCode(){
-    const code=document.getElementById('code-input').value;
-    const error=document.getElementById('error-input').value;
-    const loading=document.getElementById('fix-loading');
-    const codeBox=document.getElementById('fixed-code').querySelector('code');
-    if(!code) return alert('Kode diperlukan!');
-    loading.style.display='block';
-    try{
-        const res=await fetch('/fix_code',{
-            method:'POST',
-            headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({code,error})
-        });
-        const data=await res.json();
-        if(data.fixed_code) codeBox.textContent=data.fixed_code;
-        Prism.highlightAll();
-    }catch(e){alert(e);}
-    loading.style.display='none';
-}
+        <!-- JS LIBRARIES -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-// AUTOCOMPLETE EXAMPLE
-const suggestions=['create function','loop over array','sort list','api call','read file','write file','optimize','refactor'];
-function showAutocomplete(input){
-    const val=input.value.toLowerCase();
-    const list=document.getElementById('autocomplete');
-    list.innerHTML='';
-    if(!val) return list.style.display='none';
-    const matches=suggestions.filter(s=>s.includes(val));
-    matches.forEach(m=>{
-        const div=document.createElement('div');
-        div.className='autocomplete-item';
-        div.innerText=m;
-        div.onclick=()=>{input.value=m; list.style.display='none';};
-        list.appendChild(div);
-    });
-    list.style.display=matches.length? 'block':'none';
-}
+        <script>
+            // UTILITY FUNCTIONS
+            function togglePanel(panelId) {
+                const panel = document.getElementById(panelId + '-panel');
+                panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+                if (panelId === 'history') loadHistory();
+            }
 
-// HISTORY SEARCH FILTER
-function filterHistory(){
-    const input=document.getElementById('history-search').value.toLowerCase();
-    const items=document.querySelectorAll('#history-list li');
-    items.forEach(i=>{
-        i.style.display=i.innerText.toLowerCase().includes(input)?'block':'none';
-    });
-}
+            function toggleChat() {
+                const chat = document.getElementById('chat-container');
+                chat.style.display = chat.style.display === 'none' ? 'flex' : 'none';
+            }
 
-// DARK/LIGHT THEME TOGGLE
-const btnTheme=document.createElement('button');
-btnTheme.className='btn btn-light theme-toggle';
-btnTheme.innerHTML='<i class="fas fa-adjust"></i>';
-btnTheme.onclick=()=>document.body.classList.toggle('dark');
-document.body.appendChild(btnTheme);
-</script>
-</body>
-</html>                                                        
+            function showToast(message, type = 'info') {
+                const toastContainer = document.getElementById('toast-container');
+                const toast = document.createElement('div');
+                toast.className = `toast align-items-center text-white bg-${type} border-0`;
+                toast.setAttribute('role', 'alert');
+                toast.innerHTML = `
+                    <div class="d-flex">
+                        <div class="toast-body">${message}</div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                `;
+                toastContainer.appendChild(toast);
+                const bsToast = new bootstrap.Toast(toast);
+                bsToast.show();
+                setTimeout(() => toast.remove(), 5000);
+            }
+
+            function copyToClipboard(id) {
+                const text = document.getElementById(id).innerText;
+                navigator.clipboard.writeText(text);
+                showToast('Copied to clipboard!', 'success');
+            }
+
+            function downloadCode(id, filename) {
+                const text = document.getElementById(id).innerText;
+                const lang = document.getElementById('lang').value;
+                const ext = { python: 'py', javascript: 'js', java: 'java', cpp: 'cpp', csharp: 'cs', php: 'php', ruby: 'rb', go: 'go', swift: 'swift', kotlin: 'kt', rust: 'rs', typescript: 'ts', scala: 'scala', perl: 'pl', lua: 'lua' }[lang] || 'txt';
+                const blob = new Blob([text], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${filename}.${ext}`;
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast('Downloaded!', 'success');
+            }
+
+            function filterFeatures() {
+                const query = document.getElementById('global-search').value.toLowerCase();
+                document.querySelectorAll('.feature-item').forEach(item => {
+                    item.style.display = item.dataset.feature.includes(query) ? 'block' : 'none';
+                });
+            }
+
+            function confettiEffect() {
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            }
+
+            // API CALLS WITH ERROR HANDLING
+            async function apiCall(endpoint, data, progressId) {
+                const progress = document.getElementById(progressId);
+                if (progress) {
+                    progress.style.width = '50%';
+                }
+                try {
+                    const res = await fetch(endpoint, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                    if (res.status === 403) {
+                        showToast('Upgrade ke Premium atau login dulu!', 'warning');
+                        setTimeout(() => window.location.href = '/login', 2000);
+                        return null;
+                    }
+                    if (!res.ok) throw new Error('API Error');
+                    const result = await res.json();
+                    if (progress) progress.style.width = '100%';
+                    return result;
+                } catch (e) {
+                    showToast('Error: ' + e.message, 'danger');
+                    if (progress) progress.style.width = '0%';
+                    return null;
+                }
+            }
+
+            // GENERATE CODE
+            async function generateCode() {
+                const prompt = document.getElementById('prompt').value;
+                const lang = document.getElementById('lang').value;
+                const codeBox = document.getElementById('generated-code').querySelector('code');
+                if (!prompt) return showToast('Prompt diperlukan!', 'warning');
+                document.getElementById('gen-loading').style.display = 'block';
+                const data = await apiCall('/generate_code', { prompt, lang }, 'gen-progress');
+                if (data && data.code) {
+                    codeBox.textContent = data.code;
+                    Prism.highlightAll();
+                }
+                document.getElementById('gen-loading').style.display = 'none';
+            }
+
+            // FIX CODE
+            async function fixCode() {
+                const code = document.getElementById('code-input').value;
+                const error = document.getElementById('error-input').value;
+                const codeBox = document.getElementById('fixed-code').querySelector('code');
+                if (!code) return showToast('Kode diperlukan!', 'warning');
+                document.getElementById('fix-loading').style.display = 'block';
+                const data = await apiCall('/fix_code', { code, error }, 'fix-progress');
+                if (data && data.fixed_code) {
+                    codeBox.textContent = data.fixed_code;
+                    Prism.highlightAll();
+                }
+                document.getElementById('fix-loading').style.display = 'none';
+            }
+
+            // REVIEW CODE
+            async function reviewCode() {
+                const code = document.getElementById('review-input').value;
+                const codeBox = document.getElementById('reviewed-code').querySelector('code');
+                if (!code) return showToast('Kode diperlukan!', 'warning');
+                document.getElementById('review-loading').style.display = 'block';
+                const data = await apiCall('/review_code', { code }, 'review-progress');
+                if (data && data.review) {
+                    codeBox.textContent = data.review;
+                    Prism.highlightAll();
+                }
+                document.getElementById('review-loading').style.display = 'none';
+            }
+
+            // OPTIMIZE CODE
+            async function optimizeCode() {
+                const code = document.getElementById('optimize-input').value;
+                const codeBox = document.getElementById('optimized-code').querySelector('code');
+                if (!code) return showToast('Kode diperlukan!', 'warning');
+                document.getElementById('optimize-loading').style.display = 'block';
+                const data = await apiCall('/optimize_code', { code }, 'optimize-progress');
+                if (data && data.optimized_code) {
+                    codeBox.textContent = data.optimized_code;
+                    Prism.highlightAll();
+                }
+                document.getElementById('optimize-loading').style.display = 'none';
+            }
+
+            // REFACTOR CODE (NEW FEATURE)
+            async function refactorCode() {
+                const code = document.getElementById('refactor-input').value;
+                const codeBox = document.getElementById('refactored-code').querySelector('code');
+                if (!code) return showToast('Kode diperlukan!', 'warning');
+                document.getElementById('refactor-loading').style.display = 'block';
+                const data = await apiCall('/generate_code', { prompt: `Refactor this code for better structure and readability: ${code}`, lang: 'python' }, 'refactor-progress'); // Menggunakan generate_code dengan prompt khusus
+                if (data && data.code) {
+                    codeBox.textContent = data.code;
+                    Prism.highlightAll();
+                }
+                document.getElementById('refactor-loading').style.display = 'none';
+            }
+
+            // MINI AI CHAT
+            async function sendChat() {
+                const input = document.getElementById('chat-input');
+                const msg = input.value.trim();
+                if (!msg) return;
+                const chatBox = document.getElementById('chat-messages');
+                chatBox.innerHTML += '<div><b>You:</b> ' + msg + '</div>';
+                input.value = '';
+                const data = await apiCall('/generate_code', { prompt: msg, lang: 'python' }, null);
+                if (data && data.code) {
+                    chatBox.innerHTML += '<div><b>AI:</b> ' + data.code + '</div>';
+                } else {
+                    chatBox.innerHTML += '<div style="color:red;"><b>AI:</b> Maaf, ada error.</div>';
+                }
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+
+            // AUTOCOMPLETE
+            const suggestions = ['create function', 'loop over array', 'sort list', 'api call', 'read file', 'write file', 'optimize', 'refactor', 'async function', 'class inheritance', 'error handling', 'database query', 'unit test'];
+            let debounceTimer;
+            function showAutocomplete(input) {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    const val = input.value.toLowerCase();
+                    const list = document.getElementById('autocomplete');
+                    list.innerHTML = '';
+                    if (!val) return list.style.display = 'none';
+                    const matches = suggestions.filter(s => s.includes(val)).slice(0, 10);
+                    matches.forEach(m => {
+                        const div = document.createElement('div');
+                        div.className = 'autocomplete-item';
+                        div.innerText = m;
+                                                div.onclick = () => {
+                            input.value = m;
+                            list.style.display = 'none';
+                        };
+                        list.appendChild(div);
+                    });
+                    list.style.display = matches.length ? 'block' : 'none';
+                }, 300); // Debounce 300ms
+            }
+
+            // HISTORY FUNCTIONS
+            async function loadHistory() {
+                const list = document.getElementById('history-list');
+                list.innerHTML = '<li class="list-group-item">Loading...</li>';
+                try {
+                    const res = await fetch('/dashboard'); // Asumsikan dashboard mengembalikan JSON history jika login
+                    if (res.status === 401) {
+                        list.innerHTML = '<li class="list-group-item text-warning">Login dulu untuk lihat history!</li>';
+                        return;
+                    }
+                    const data = await res.json();
+                    list.innerHTML = '';
+                    data.codes.forEach(code => {
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item';
+                        li.innerHTML = `<strong>${code.prompt}</strong><br><pre><code>${code.code}</code></pre>`;
+                        list.appendChild(li);
+                    });
+                    document.getElementById('history-stats').innerText = `Total Kode: ${data.codes.length}`;
+                } catch (e) {
+                    list.innerHTML = '<li class="list-group-item text-danger">Error loading history.</li>';
+                }
+            }
+
+            function filterHistory() {
+                const query = document.getElementById('history-search').value.toLowerCase();
+                document.querySelectorAll('#history-list li').forEach(li => {
+                    li.style.display = li.innerText.toLowerCase().includes(query) ? 'block' : 'none';
+                });
+            }
+
+            function exportHistory() {
+                const items = Array.from(document.querySelectorAll('#history-list li')).map(li => ({
+                    prompt: li.querySelector('strong').innerText,
+                    code: li.querySelector('code').innerText
+                }));
+                const blob = new Blob([JSON.stringify(items, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'history.json';
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast('History exported!', 'success');
+            }
+
+            // THEME TOGGLE
+            const btnTheme = document.createElement('button');
+            btnTheme.className = 'btn btn-light theme-toggle';
+            btnTheme.innerHTML = '<i class="fas fa-adjust"></i>';
+            btnTheme.onclick = () => {
+                document.body.classList.toggle('dark');
+                localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+            };
+            document.body.appendChild(btnTheme);
+
+            // LOAD THEME ON PAGE LOAD
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark');
+            }
+
+            // KEYBOARD SHORTCUTS
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey && e.key === 'Enter') {
+                    generateCode();
+                }
+            });
+        </script>
+    </body>
+</html>
