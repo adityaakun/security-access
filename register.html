@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - AI Coding Assistant</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap");
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Quicksand", sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #111;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .ring {
+            position: relative;
+            width: 500px;
+            height: 500px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .ring i {
+            position: absolute;
+            inset: 0;
+            border: 2px solid #fff;
+            transition: 0.5s;
+        }
+
+        .ring i:nth-child(1) {
+            border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%;
+            animation: animate 6s linear infinite;
+        }
+
+        .ring i:nth-child(2) {
+            border-radius: 41% 44% 56% 59%/38% 62% 63% 37%;
+            animation: animate 4s linear infinite;
+        }
+
+        .ring i:nth-child(3) {
+            border-radius: 41% 44% 56% 59%/38% 62% 63% 37%;
+            animation: animate2 10s linear infinite;
+        }
+
+        .ring:hover i {
+            border: 6px solid var(--clr);
+            filter: drop-shadow(0 0 20px var(--clr));
+        }
+
+        @keyframes animate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes animate2 {
+            0% { transform: rotate(360deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        .register {
+            position: absolute;
+            width: 300px;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .register h3 {
+            font-size: 2em;
+            color: #fff;
+        }
+
+        .register .inputBx {
+            position: relative;
+            width: 100%;
+        }
+
+        .register .inputBx input {
+            position: relative;
+            width: 100%;
+            padding: 12px 20px;
+            background: transparent;
+            border: 2px solid #fff;
+            border-radius: 40px;
+            font-size: 1.2em;
+            color: #fff;
+            box-shadow: none;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .register .inputBx input:focus {
+            border-color: #00ff0a;
+            box-shadow: 0 0 10px rgba(0, 255, 10, 0.5);
+        }
+
+        .register .inputBx input[type="submit"] {
+            width: 100%;
+            background: linear-gradient(45deg, #ff357a, #fff172);
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .register .inputBx input[type="submit"]:hover {
+            transform: scale(1.05);
+        }
+
+        .register .inputBx input::placeholder {
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #fff;
+            font-size: 1.2em;
+        }
+
+        .links {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .links a {
+            color: #fff;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .links a:hover {
+            color: #00ff0a;
+        }
+
+        #message {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        /* Responsivitas untuk mobile */
+        @media (max-width: 600px) {
+            .ring {
+                width: 400px;
+                height: 400px;
+            }
+            .register {
+                width: 250px;
+            }
+            .register h3 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ring">
+        <i style="--clr:#00ff0a;"></i>
+        <i style="--clr:#ff0057;"></i>
+        <i style="--clr:#fffd44;"></i>
+        <div class="register">
+            <h3>Register AI Coder</h3>
+            <div id="message"></div> <!-- Placeholder untuk pesan error/sukses -->
+            <form id="registerForm">
+                <div class="inputBx">
+                    <input type="text" id="username" placeholder="Username" required>
+                </div>
+                <div class="inputBx">
+                    <input type="email" id="email" placeholder="Email" required>
+                </div>
+                <div class="inputBx">
+                    <input type="password" id="password" placeholder="Password" required>
+                    <span id="togglePassword" class="toggle">👁️</span>
+                </div>
+                <div class="inputBx">
+                    <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+                </div>
+                <div class="inputBx">
+                    <input type="submit" value="Register">
+                </div>
+            </form>
+            <div class="links">
+                <a href="#">Forget Password</a>
+                <a href="login.html">Login</a> <!-- Link ke halaman login -->
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Mencegah pengiriman form default
+
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const confirmPassword = document.getElementById('confirmPassword').value.trim();
+            const message = document.getElementById('message');
+
+            // Reset pesan sebelumnya
+            message.textContent = '';
+
+            // Validasi sederhana
+            if (!username || !email || !password || !confirmPassword) {
+                message.style.color = 'red';
+                message.textContent = 'Semua field harus diisi.';
+                return;
+            }
+            if (password !== confirmPassword) {
+                message.style.color = 'red';
+                message.textContent = 'Password dan konfirmasi password tidak cocok.';
+                return;
+            }
+            if (password.length < 6) {
+                message.style.color = 'red';
+                message.textContent = 'Password minimal 6 karakter.';
+                return;
+            }
+            // Validasi email sederhana
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                message.style.color = 'red';
+                message.textContent = 'Email tidak valid.';
+                return;
+            }
+
+            // Simulasi register sukses (ganti dengan API call ke backend)
+            message.style.color = 'green';
+            message.textContent = 'Registrasi berhasil! Mengalihkan ke login...';
+            // Simulasi redirect: setTimeout(() => window.location.href = 'login.html', 2000);
+        });
+
+        // Toggle visibility password
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordField = document.getElementById('password');
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            this.textContent = type === 'password' ? '👁️' : '🙈';
+        });
+    </script>
+</body>
+</html>
