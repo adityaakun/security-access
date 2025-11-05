@@ -1,106 +1,391 @@
-# app.py - Backend Flask untuk AI Coding Assistant
-from flask import Flask, request, jsonify, render_template
-from transformers import pipeline
-import logging
+from flask import Flask, request, jsonify, render_template, redirect, url_for, session, flash
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
+import openai
 import os
-from datetime import datetime
+import datetime
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'your-secret-key-here'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///coding_ai.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Konfigurasi logging untuk debugging dan monitoring
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
+db = SQLAlchemy(app)
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
 
-# Load model AI untuk generate kode (gunakan model kecil seperti CodeGPT atau GPT-2 fine-tuned)
-# Untuk efisiensi, gunakan pipeline dari Hugging Face. Jika ingin lebih baik, ganti dengan API.
-try:
-    code_generator = pipeline("text-generation", model="microsoft/DialoGPT-medium")  # Placeholder; ganti dengan model coding seperti "Salesforce/codegen-350M-mono"
-    logger.info("Model AI loaded successfully.")
-except Exception as e:
-    logger.error(f"Failed to load model: {e}")
-    code_generator = None
+openai.api_key = os.getenv('OPENAI_API_KEY', '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')
 
-# Fungsi untuk generate kode berdasarkan prompt
-def generate_code(prompt, max_length=500):
-    if code_generator:
-        try:
-            result = code_generator(prompt, max_length=max_length, num_return_sequences=1)
-            return result[0]['generated_text']
-        except Exception as e:
-            logger.error(f"Error generating code: {e}")
-            return "Error: Unable to generate code."
-    else:
-        return "AI model not loaded. Please check configuration."
+# Model Database
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(150), unique=True, nullable=False)
+    password = db.Column(db.String(150), nullable=False)
+    is_premium = db.Column(db.Boolean, default=False)
+    codes = db.relationship('CodeHistory', backref='user', lazy=True)
 
-# Fungsi untuk fix kode (sederhana: deteksi error dan saran perbaikan)
-def fix_code(code_input):
-    # Placeholder logic: Cek syntax Python sederhana
-    try:
-        compile(code_input, '<string>', 'exec')
-        return "Code is syntactically correct. No fixes needed."
-    except SyntaxError as e:
-        logger.info(f"Syntax error detected: {e}")
-        return f"Syntax error: {e}. Suggestion: Check indentation and syntax."
-    except Exception as e:
-        return f"Other error: {e}. Please provide more details."
+class CodeHistory(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    prompt = db.Column(db.Text, nullable=False)
+    code = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
-# Route untuk halaman utama (render template)
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+# Routes
 @app.route('/')
-def index():
+def home():
     return render_template('index.html')
 
-# API endpoint untuk generate kode
-@app.route('/generate', methods=['POST'])
-def api_generate():
-    data = request.get_json()
-    prompt = data.get('prompt', '')
-    if not prompt:
-        return jsonify({'error': 'Prompt is required'}), 400
-    code = generate_code(prompt)
-    logger.info(f"Generated code for prompt: {prompt[:50]}...")
-    return jsonify({'code': code})
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username).first()
+        if user and check_password_hash(user.password, password):
+            login_user(user)
+            return redirect(url_for('dashboard'))
+        flash('Login gagal!')
+    return render_template('login.html')
 
-# API endpoint untuk fix kode
-@app.route('/fix', methods=['POST'])
-def api_fix():
-    data = request.get_json()
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = generate_password_hash(request.form['password'])
+        new_user = User(username=username, password=password)
+        db.session.add(new_user)
+        db.session.commit()
+        flash('Registrasi berhasil!')
+        return redirect(url_for('login'))
+    return render_template('register.html')
+
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    if not current_user.is_premium:
+        return redirect(url_for('upgrade'))
+    codes = CodeHistory.query.filter_by(user_id=current_user.id).all()
+    return render_template('dashboard.html', codes=codes)
+
+@app.route('/upgrade')
+@login_required
+def upgrade():
+    # Simulasi payment
+    current_user.is_premium = True
+    db.session.commit()
+    flash('Upgrade ke Premium berhasil!')
+    return redirect(url_for('dashboard'))
+
+@app.route('/generate_code', methods=['POST'])
+@login_required
+def generate_code():
+    if not current_user.is_premium:
+        return jsonify({'error': 'Upgrade ke Premium dulu!'}), 403
+    data = request.json
+    prompt = data.get('prompt', '')
+    lang = data.get('lang', 'python')
+    if not prompt:
+        return jsonify({'error': 'Prompt diperlukan'}), 400
+    
+    full_prompt = f"Generate {lang} code for: {prompt}"
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a premium coding assistant. Generate clean, efficient code."},
+                {"role": "user", "content": full_prompt}
+            ],
+            max_tokens=1500,
+            temperature=0.7
+        )
+        code = response.choices[0].message['content'].strip()
+        # Simpan ke history
+        new_code = CodeHistory(user_id=current_user.id, prompt=prompt, code=code)
+        db.session.add(new_code)
+        db.session.commit()
+        return jsonify({'code': code})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/fix_code', methods=['POST'])
+@login_required
+def fix_code():
+    if not current_user.is_premium:
+        return jsonify({'error': 'Upgrade ke Premium dulu!'}), 403
+    data = request.json
+    code = data.get('code', '')
+    error = data.get('error', '')
+    if not code:
+        return jsonify({'error': 'Kode diperlukan'}), 400
+    
+    prompt = f"Fix this code: {code}. Error: {error}. Provide corrected code and explanation."
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "Debug and fix code, explain changes."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=1500,
+            temperature=0.5
+        )
+        fixed = response.choices[0].message['content'].strip()
+        return jsonify({'fixed_code': fixed})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/review_code', methods=['POST'])
+@login_required
+def review_code():
+    if not current_user.is_premium:
+        return jsonify({'error': 'Upgrade ke Premium dulu!'}), 403
+    data = request.json
     code = data.get('code', '')
     if not code:
-        return jsonify({'error': 'Code is required'}), 400
-    fixed = fix_code(code)
-    logger.info(f"Fixed code: {code[:50]}...")
-    return jsonify({'fixed': fixed})
+        return jsonify({'error': 'Kode diperlukan'}), 400
+    
+    prompt = f"Review this code for best practices, security, and improvements: {code}"
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "Provide detailed code review."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=1500
+        )
+        review = response.choices[0].message['content'].strip()
+        return jsonify({'review': review})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
-# Route untuk upload file kode (opsional, untuk fitur lanjutan)
-@app.route('/upload', methods=['POST'])
-def upload_file():
-    if 'file' not in request.files:
-        return jsonify({'error': 'No file uploaded'}), 400
-    file = request.files['file']
-    if file.filename == '':
-        return jsonify({'error': 'No file selected'}), 400
-    # Simpan file sementara dan proses
-    filepath = os.path.join('uploads', file.filename)
-    file.save(filepath)
-    with open(filepath, 'r') as f:
-        code = f.read()
-    fixed = fix_code(code)
-    os.remove(filepath)  # Hapus setelah proses
-    return jsonify({'fixed': fixed})
-
-# Middleware untuk logging request
-@app.before_request
-def log_request_info():
-    logger.info(f"Request: {request.method} {request.url} from {request.remote_addr}")
-
-# Error handler
-@app.errorhandler(500)
-def internal_error(error):
-    logger.error(f"Internal error: {error}")
-    return jsonify({'error': 'Internal server error'}), 500
+@app.route('/optimize_code', methods=['POST'])
+@login_required
+def optimize_code():
+    if not current_user.is_premium:
+        return jsonify({'error': 'Upgrade ke Premium dulu!'}), 403
+    data = request.json
+    code = data.get('code', '')
+    if not code:
+        return jsonify({'error': 'Kode diperlukan'}), 400
+    
+    prompt = f"Optimize this code for performance and efficiency: {code}"
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "Optimize code for speed and resources."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=1500
+        )
+        optimized = response.choices[0].message['content'].strip()
+        return jsonify({'optimized_code': optimized})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    # Buat folder uploads jika belum ada
-    if not os.path.exists('uploads'):
-        os.makedirs('uploads')
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True)from flask import Flask, request, jsonify, render_template, redirect, url_for, session, flash
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
+import openai
+import os
+import datetime
+
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'your-secret-key-here'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///coding_ai.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+
+openai.api_key = os.getenv('OPENAI_API_KEY', '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')
+
+# Model Database
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(150), unique=True, nullable=False)
+    password = db.Column(db.String(150), nullable=False)
+    is_premium = db.Column(db.Boolean, default=False)
+    codes = db.relationship('CodeHistory', backref='user', lazy=True)
+
+class CodeHistory(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    prompt = db.Column(db.Text, nullable=False)
+    code = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+# Routes
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username).first()
+        if user and check_password_hash(user.password, password):
+            login_user(user)
+            return redirect(url_for('dashboard'))
+        flash('Login gagal!')
+    return render_template('login.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = generate_password_hash(request.form['password'])
+        new_user = User(username=username, password=password)
+        db.session.add(new_user)
+        db.session.commit()
+        flash('Registrasi berhasil!')
+        return redirect(url_for('login'))
+    return render_template('register.html')
+
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    if not current_user.is_premium:
+        return redirect(url_for('upgrade'))
+    codes = CodeHistory.query.filter_by(user_id=current_user.id).all()
+    return render_template('dashboard.html', codes=codes)
+
+@app.route('/upgrade')
+@login_required
+def upgrade():
+    # Simulasi payment
+    current_user.is_premium = True
+    db.session.commit()
+    flash('Upgrade ke Premium berhasil!')
+    return redirect(url_for('dashboard'))
+
+@app.route('/generate_code', methods=['POST'])
+@login_required
+def generate_code():
+    if not current_user.is_premium:
+        return jsonify({'error': 'Upgrade ke Premium dulu!'}), 403
+    data = request.json
+    prompt = data.get('prompt', '')
+    lang = data.get('lang', 'python')
+    if not prompt:
+        return jsonify({'error': 'Prompt diperlukan'}), 400
+    
+    full_prompt = f"Generate {lang} code for: {prompt}"
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a premium coding assistant. Generate clean, efficient code."},
+                {"role": "user", "content": full_prompt}
+            ],
+            max_tokens=1500,
+            temperature=0.7
+        )
+        code = response.choices[0].message['content'].strip()
+        # Simpan ke history
+        new_code = CodeHistory(user_id=current_user.id, prompt=prompt, code=code)
+        db.session.add(new_code)
+        db.session.commit()
+        return jsonify({'code': code})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/fix_code', methods=['POST'])
+@login_required
+def fix_code():
+    if not current_user.is_premium:
+        return jsonify({'error': 'Upgrade ke Premium dulu!'}), 403
+    data = request.json
+    code = data.get('code', '')
+    error = data.get('error', '')
+    if not code:
+        return jsonify({'error': 'Kode diperlukan'}), 400
+    
+    prompt = f"Fix this code: {code}. Error: {error}. Provide corrected code and explanation."
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "Debug and fix code, explain changes."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=1500,
+            temperature=0.5
+        )
+        fixed = response.choices[0].message['content'].strip()
+        return jsonify({'fixed_code': fixed})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/review_code', methods=['POST'])
+@login_required
+def review_code():
+    if not current_user.is_premium:
+        return jsonify({'error': 'Upgrade ke Premium dulu!'}), 403
+    data = request.json
+    code = data.get('code', '')
+    if not code:
+        return jsonify({'error': 'Kode diperlukan'}), 400
+    
+    prompt = f"Review this code for best practices, security, and improvements: {code}"
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "Provide detailed code review."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=1500
+        )
+        review = response.choices[0].message['content'].strip()
+        return jsonify({'review': review})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/optimize_code', methods=['POST'])
+@login_required
+def optimize_code():
+    if not current_user.is_premium:
+        return jsonify({'error': 'Upgrade ke Premium dulu!'}), 403
+    data = request.json
+    code = data.get('code', '')
+    if not code:
+        return jsonify({'error': 'Kode diperlukan'}), 400
+    
+    prompt = f"Optimize this code for performance and efficiency: {code}"
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "Optimize code for speed and resources."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=1500
+        )
+        optimized = response.choices[0].message['content'].strip()
+        return jsonify({'optimized_code': optimized})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True)
