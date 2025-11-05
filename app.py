@@ -15,7 +15,7 @@ db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
-openai.api_key = os.getenv('OPENAI_API_KEY', 'sk-your-key-here')
+openai.api_key = os.getenv('OPENAI_API_KEY', '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')
 
 # -------------------- Models --------------------
 class User(UserMixin, db.Model):
