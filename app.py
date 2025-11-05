@@ -51,6 +51,8 @@ def load_user(user_id):
 # -------------------- Routes --------------------
 @app.route('/')
 def home():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
     return render_template('index.html')
 
 @app.route('/login', methods=['GET', 'POST'])
