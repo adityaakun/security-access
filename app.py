@@ -5,9 +5,14 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import openai
 import os
 import datetime
+import logging
+
+# Tambahan untuk rate limiting (install via pip install flask-limiter)
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'super-secret-key'
+app.config['SECRET_KEY'] = 'super-secret-key'  # Ganti dengan os.getenv untuk production
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///coding_ai.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -15,7 +20,14 @@ db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
-openai.api_key = os.getenv('OPENAI_API_KEY', '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')
+# Rate limiter: 10 request per menit per IP untuk API routes
+limiter = Limiter(app, key_func=get_remote_address, default_limits=["10 per minute"])
+
+# API Key: DIMASUKKAN SEBAGAI HARDCODE (TIDAK AMAN - GANTI KE ENV VAR!)
+openai.api_key = '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'
+
+# Logging setup
+logging.basicConfig(level=logging.INFO)
 
 # -------------------- Models --------------------
 class User(UserMixin, db.Model):
@@ -102,11 +114,17 @@ def openai_request(prompt, system_prompt="You are a coding assistant.", temperat
             temperature=temperature
         )
         return response.choices[0].message['content'].strip()
+    except openai.error.OpenAIError as e:
+        logging.error(f"OpenAI Error: {str(e)}")
+        return f"Error: {str(e)}"
     except Exception as e:
-        return str(e)
+        logging.error(f"Unexpected Error: {str(e)}")
+        return "Unexpected error occurred."
 
+# -------------------- API Routes (dengan rate limiting) --------------------
 @app.route('/generate_code', methods=['POST'])
 @login_required
+@limiter.limit("5 per minute")
 def generate_code():
     if not current_user.is_premium:
         return jsonify({'error': 'Upgrade ke Premium dulu!'}), 403
@@ -124,6 +142,7 @@ def generate_code():
 
 @app.route('/fix_code', methods=['POST'])
 @login_required
+@limiter.limit("5 per minute")
 def fix_code():
     if not current_user.is_premium:
         return jsonify({'error': 'Upgrade ke Premium dulu!'}), 403
@@ -138,6 +157,7 @@ def fix_code():
 
 @app.route('/review_code', methods=['POST'])
 @login_required
+@limiter.limit("5 per minute")
 def review_code():
     if not current_user.is_premium:
         return jsonify({'error': 'Upgrade ke Premium dulu!'}), 403
@@ -151,6 +171,7 @@ def review_code():
 
 @app.route('/optimize_code', methods=['POST'])
 @login_required
+@limiter.limit("5 per minute")
 def optimize_code():
     if not current_user.is_premium:
         return jsonify({'error': 'Upgrade ke Premium dulu!'}), 403
@@ -161,6 +182,40 @@ def optimize_code():
     prompt = f"Optimize this code for performance and readability: {code}"
     optimized = openai_request(prompt, system_prompt="Optimize code for speed, memory, and readability.")
     return jsonify({'optimized_code': optimized})
+
+@app.route('/refactor_code', methods=['POST'])
+@login_required
+@limiter.limit("5 per minute")
+def refactor_code():
+    if not current_user.is_premium:
+        return jsonify({'error': 'Upgrade ke Premium dulu!'}), 403
+    data = request.json
+    code = data.get('code', '')
+    if not code:
+        return jsonify({'error': 'Kode diperlukan'}), 400
+    prompt = f"Refactor this code for better structure and readability: {code}"
+    refactored = openai_request(prompt, system_prompt="Refactor code for improved structure.")
+    return jsonify({'refactored_code': refactored})
+
+@app.route('/chat', methods=['POST'])
+@login_required
+@limiter.limit("10 per minute")
+def chat():
+    if not current_user.is_premium:
+        return jsonify({'error': 'Upgrade ke Premium dulu!'}), 403
+    data = request.json
+    message = data.get('message', '')
+    if not message:
+        return jsonify({'error': 'Pesan diperlukan'}), 400
+    response = openai_request(message, system_prompt="You are a helpful coding assistant for quick chats.")
+    return jsonify({'response': response})
+
+@app.route('/get_history', methods=['GET'])
+@login_required
+def get_history():
+    codes = CodeHistory.query.filter_by(user_id=current_user.id).order_by(CodeHistory.timestamp.desc()).all()
+    history = [{'id': c.id, 'prompt': c.prompt, 'code': c.code, 'timestamp': c.timestamp.isoformat()} for c in codes]
+    return jsonify({'codes': history})
 
 # -------------------- Run App --------------------
 if __name__ == '__main__':
