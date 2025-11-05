@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap");
+
+        :root {
+            --bgColor: #111;
+            --inputColor: #fff;
+            --outlineColor: #00ff0a;
+            --beamColor: #ff0057;
+            --spacer: 1rem;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: "Quicksand", sans-serif;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            display: grid;
+            place-items: center;
+            background: var(--bgColor);
+            overflow: hidden;
+        }
+
+        body.show-password {
+            --bgColor: #000;
+            --inputColor: #fff;
+            --outlineColor: var(--beamColor);
+        }
+
+        .ring {
+            position: relative;
+            width: 500px;
+            height: 500px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .ring i {
+            position: absolute;
+            inset: 0;
+            border: 2px solid #fff;
+            transition: 0.5s;
+        }
+
+        .ring i:nth-child(1) {
+            border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%;
+            animation: animate 6s linear infinite;
+        }
+
+        .ring i:nth-child(2) {
+            border-radius: 41% 44% 56% 59%/38% 62% 63% 37%;
+            animation: animate 4s linear infinite;
+        }
+
+        .ring i:nth-child(3) {
+            border-radius: 41% 44% 56% 59%/38% 62% 63% 37%;
+            animation: animate2 10s linear infinite;
+        }
+
+        .ring:hover i {
+            border: 6px solid var(--clr);
+            filter: drop-shadow(0 0 20px var(--clr));
+        }
+
+        @keyframes animate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes animate2 {
+            0% { transform: rotate(360deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        .login {
+            position: absolute;
+            width: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        form {
+            transform: translate3d(0,0,0);
+            padding: var(--spacer);
+        }
+
+        form > * + * {
+            margin-top: var(--spacer);
+        }
+
+        .form-item > * + * {
+            margin-top: 0.5rem;
+        }
+
+        label,
+        input,
+        button {
+            font-size: 1.2rem;
+            color: var(--inputColor);
+        }
+
+        input:focus,
+        button:focus {
+            outline: 3px solid var(--outlineColor);
+            outline-offset: 2px;
+        }
+
+        input::-moz-focus-inner,
+        button::-moz-focus-inner {
+            border: none;
+        }
+
+        #password {
+            color: var(--inputColor);
+        }
+
+        button {
+            border: none;
+            background: none;
+        }
+
+        #submit {
+            cursor: pointer;
+            margin: calc(var(--spacer) * 2) 0 0 2px;
+            padding: 0.75rem 1.25rem;
+            color: var(--bgColor);
+            background-color: var(--inputColor);
+            box-shadow: 4px 4px 0 rgba(30, 144, 255, 0.2);
+            transition: 0.3s;
+        }
+
+        #submit:hover {
+            transform: scale(1.05);
+        }
+
+        #submit:active {
+            transform: translateY(1px);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        input {
+            padding: 0.75rem 4rem 0.75rem 0.75rem;
+            width: 100%;
+            border: 2px solid transparent;
+            border-radius: 0;
+            background-color: transparent;
+            box-shadow: 
+                inset 0 0 0 2px #fff,
+                inset 6px 6px 0 rgba(0, 255, 10, 0.2),
+                3px 3px 0 rgba(0, 255, 10, 0.2);
+            appearance: none;
+        }
+
+        input:focus {
+            outline-offset: 1px;
+        }
+
+        body.show-password input {
+            box-shadow: inset 0 0 0 2px #fff;
+            border: 2px dashed #fff;
+        }
+
+        body.show-password input:focus {
+            outline: none;
+            border-color: var(--beamColor);
+        }
+
+        #eyeball {
+            --size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            outline: none;
+            position: absolute;
+            top: 50%;
+            right: 0.75rem;
+            border: none;
+            background-color: transparent;
+            transform: translateY(-50%);
+        }
+
+        #eyeball:active {
+            transform: translateY(calc(-50% + 1px));
+        }
+
+        .eye {
+            width: var(--size);
+            height: var(--size);
+            border: 2px solid var(--inputColor);
+            border-radius: calc(var(--size) / 1.5) 0;
+            transform: rotate(45deg);
+            position: relative;
+        }
+
+        .eye::before,
+        .eye::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            margin: auto;
+            border-radius: 100%;
+        }
+
+        .eye::before {
+            width: 35%;
+            height: 35%;
+            background-color: var(--inputColor);
+        }
+
+        .eye::after {
+            width: 65%;
+            height: 65%;
+            border: 2px solid var(--inputColor);
+            border-radius: 100%;
+        }
+
+        #beam {
+            position: absolute;
+            top: 50%;
+            right: 1.75rem;
+            clip-path: polygon(100% 50%, 100% 50%, 0 0, 0 100%);
+            width: 100vw;
+            height: 25vw;
+            z-index: 1;
+            mix-blend-mode: multiply;
+            transition: transform 200ms ease-out;
+            transform-origin: 100% 50%;
+            transform: translateY(-50%) rotate(var(--beamDegrees, 0));
+            pointer-events: none;
+        }
+
+        body.show-password #beam {
+            background: var(--beamColor);
+        }
+
+        #message {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        /* Responsivitas untuk mobile */
+        @media (max-width: 600px) {
+            .ring {
+                width: 400px;
+                height: 400px;
+            }
+            .login {
+                width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ring">
+        <i style="--clr:#00ff0a;"></i>
+        <i style="--clr:#ff0057;"></i>
+        <i style="--clr:#fffd44;"></i>
+        <div class="login">
+            <form id="loginForm">
+                <div class="form-item">
+                    <label for="username">Username</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="username" placeholder="Username" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" required>
+                    </div>
+                </div>
+                <div class="form-item">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" placeholder="Password" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" required>
+                        <button type="button" id="eyeball" aria-label="Toggle password visibility">
+                            <div class="eye"></div>
+                        </button>
+                        <div id="beam"></div>
+                    </div>
+                </div>
+                <button id="submit" type="submit">Login!</button>
+            </form>
+            <p id="message"></p>
+        </div>
+    </div>
+    <script>
+        const root = document.documentElement;
+        const eye = document.getElementById('eyeball');
+        const beam = document.getElementById('beam');
+        const passwordInput = document.getElementById('password');
+
+        root.addEventListener('mousemove', (e) => {
+            const rect = beam.getBoundingClientRect();
+            const beamCenterX = rect.left + rect.width / 2;
+            const beamCenterY = rect.top + rect.height / 2;
+            const rad = Math.atan2(e.clientY - beamCenterY, e.clientX - beamCenterX);
+            const degrees = (rad * (180 / Math.PI)) * -1;
+            root.style.setProperty('--beamDegrees', `${degrees}deg`);
+        });
+
+        eye.addEventListener('click', (e) => {
+            e.preventDefault();
+            const isPasswordVisible = passwordInput.type === 'text';
+            passwordInput.type = isPasswordVisible ? 'password' : 'text';
+            document.body.classList.toggle('show-password', !isPasswordVisible);
+            passwordInput.focus();
+        });
+
+        // Tambahan: Validasi dan submit handler
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const message = document.getElementById('message');
+            message.textContent = '';
+            if (!username || !password) {
+                message.style.color = 'red';
+                message.textContent = 'Username dan password tidak boleh kosong.';
+                return;
+            }
+            // Simulasi login
+            if (username === 'admin' && password === 'password123') {
+                message.style.color = 'green';
+                message.textContent = 'Login berhasil!';
+            } else {
+                message.style.color = 'red';
+                message.textContent = 'Username atau password salah.';
+            }
+        });
+    </script>
+</body>
+</html>
